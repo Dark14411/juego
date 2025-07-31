@@ -1376,15 +1376,31 @@ export default function EpicPouGame() {
 
   return (
     <div className={`min-h-screen bg-gradient-to-br from-purple-900 via-pink-900 to-red-900 overflow-x-hidden ${showGame ? 'game-active' : ''}`}>
-      {/* 🎮 HEADER */}
-      <header className="bg-black/30 backdrop-blur-md border-b border-white/20">
-        <div className="container mx-auto px-4 py-4">
+      {/* 🎮 HEADER OPTIMIZADO PARA MÓVILES */}
+      <header className="bg-black/30 backdrop-blur-md border-b border-white/20 sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="text-4xl animate-pulse">🎮</div>
-              <div>
-                <h1 className="text-2xl font-bold text-white">Tamagotchi Pro & Retro Arcade</h1>
-                <p className="text-sm text-white/80">Experiencia gaming profesional completa</p>
+            <div className="flex items-center gap-2 md:gap-3">
+              <div className="text-2xl md:text-4xl animate-pulse">🎮</div>
+              <div className="hidden sm:block">
+                <h1 className="text-lg md:text-2xl font-bold text-white">Tamagotchi Pro & Retro Arcade</h1>
+                <p className="text-xs md:text-sm text-white/80">Experiencia gaming profesional completa</p>
+              </div>
+              <div className="sm:hidden">
+                <h1 className="text-sm font-bold text-white">Tamagotchi Pro</h1>
+                <p className="text-xs text-white/80">Gaming Completo</p>
+              </div>
+            </div>
+            
+            {/* 🎮 ESTADÍSTICAS RÁPIDAS EN MÓVILES */}
+            <div className="flex items-center gap-2 md:hidden">
+              <div className="flex items-center gap-1 bg-black/20 rounded-lg px-2 py-1">
+                <Coins className="w-3 h-3 text-yellow-400" />
+                <span className="text-white font-semibold text-xs">{pet.coins}</span>
+              </div>
+              <div className="flex items-center gap-1 bg-black/20 rounded-lg px-2 py-1">
+                <Target className="w-3 h-3 text-green-400" />
+                <span className="text-white font-semibold text-xs">Nv.{pet.level}</span>
               </div>
             </div>
             
@@ -1394,7 +1410,7 @@ export default function EpicPouGame() {
               className="md:hidden text-white hover:bg-white/20"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </Button>
           </div>
         </div>
@@ -1402,10 +1418,10 @@ export default function EpicPouGame() {
 
       <div className="container mx-auto px-4 py-6 max-w-7xl">
         <div className="flex flex-col lg:flex-row gap-6 min-h-0">
-          {/* 🎮 NAVEGACIÓN LATERAL */}
+          {/* 🎮 NAVEGACIÓN LATERAL - OPTIMIZADA PARA MÓVILES */}
           <nav className={`
             lg:w-64 bg-black/30 backdrop-blur-md rounded-xl p-4 border border-white/20 lg:sticky lg:top-6 lg:self-start
-            ${isMobileMenuOpen ? 'block' : 'hidden lg:block'}
+            ${isMobileMenuOpen ? 'block absolute top-full left-0 right-0 z-40 lg:relative lg:top-auto' : 'hidden lg:block'}
           `}>
             <div className="space-y-2">
               {navigationItems.map((item) => {
@@ -1414,7 +1430,7 @@ export default function EpicPouGame() {
                   <Button
                     key={item.id}
                     variant={activeTab === item.id ? 'default' : 'ghost'}
-                    className={`w-full justify-start text-white font-semibold ${
+                    className={`w-full justify-start text-white font-semibold text-sm md:text-base ${
                       activeTab === item.id 
                         ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600' 
                         : 'hover:bg-white/20'
@@ -1424,7 +1440,7 @@ export default function EpicPouGame() {
                       setIsMobileMenuOpen(false)
                     }}
                   >
-                    <Icon className="w-5 h-5 mr-3" />
+                    <Icon className="w-4 h-4 md:w-5 md:h-5 mr-2 md:mr-3" />
                     {item.label}
                   </Button>
                 )
@@ -1432,21 +1448,21 @@ export default function EpicPouGame() {
             </div>
           </nav>
 
-          {/* 🎮 CONTENIDO PRINCIPAL */}
+          {/* 🎮 CONTENIDO PRINCIPAL - OPTIMIZADO PARA MÓVILES */}
           <main className="flex-1 min-w-0 overflow-auto">
-            <div className="max-h-[calc(100vh-12rem)] overflow-y-auto scrollbar-thin scrollbar-thumb-purple-600 scrollbar-track-purple-900/20">
+            <div className="max-h-[calc(100vh-8rem)] md:max-h-[calc(100vh-12rem)] overflow-y-auto scrollbar-thin scrollbar-thumb-purple-600 scrollbar-track-purple-900/20">
               {renderActiveContent()}
             </div>
           </main>
         </div>
       </div>
 
-      {/* 🎮 MODAL DE NOMBRE */}
+      {/* 🎮 MODAL DE NOMBRE - OPTIMIZADO PARA MÓVILES */}
       {showNameModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <Card className="w-96 bg-gradient-to-br from-purple-600 to-pink-600 text-white border-0 shadow-2xl">
-            <CardHeader>
-              <CardTitle>Cambiar Nombre</CardTitle>
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <Card className="w-full max-w-sm md:w-96 bg-gradient-to-br from-purple-600 to-pink-600 text-white border-0 shadow-2xl">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg md:text-xl">Cambiar Nombre</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <input
@@ -1454,11 +1470,11 @@ export default function EpicPouGame() {
                 value={petName}
                 onChange={(e) => setPetName(e.target.value)}
                 placeholder="Nuevo nombre"
-                className="w-full p-3 border rounded-lg bg-white/20 text-white placeholder-white/70"
+                className="w-full p-3 border rounded-lg bg-white/20 text-white placeholder-white/70 text-sm md:text-base"
                 onKeyPress={(e) => e.key === 'Enter' && handleChangeName()}
               />
               <div className="flex gap-2">
-                <Button onClick={handleChangeName} className="flex-1 bg-green-500 hover:bg-green-600">
+                <Button onClick={handleChangeName} className="flex-1 bg-green-500 hover:bg-green-600 text-sm md:text-base">
                   Cambiar
                 </Button>
                 <Button 
@@ -1467,7 +1483,7 @@ export default function EpicPouGame() {
                     setShowNameModal(false)
                     setPetName('')
                   }}
-                  className="flex-1 border-white/30 text-white hover:bg-white/20"
+                  className="flex-1 border-white/30 text-white hover:bg-white/20 text-sm md:text-base"
                 >
                   Cancelar
                 </Button>
