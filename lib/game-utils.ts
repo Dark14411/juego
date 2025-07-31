@@ -240,7 +240,7 @@ export function calculateGameRewards(
 
   const winnerBonus = isWinner ? 1.5 : 1
   const gameTypeMultiplier = {
-    'snake': 1.0,
+
     'tetris': 1.2,
     'pong': 1.1,
     'memory': 1.3,
@@ -330,7 +330,7 @@ export const GAME_CONSTANTS = {
 /**
  * 🎮 TIPOS DE JUEGO
  */
-export type GameType = 'snake' | 'tetris' | 'pong' | 'memory' | 'simon' | 'breakout' | '2048'
+export type GameType = 'tetris' | 'pong' | 'memory' | 'simon' | 'breakout' | '2048'
 
 /**
  * 🎮 INTERFACES PARA RECOMPENSAS

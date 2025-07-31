@@ -1,15 +1,16 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
+import './custom-scrollbar.css'
 
 export const metadata: Metadata = {
-  title: 'Mi Pou Virtual - Tu Mascota Virtual',
-  description: 'Tu mascota virtual personalizable con mini-juegos, sistema de logros y mucho más. ¡Juega y cuida de tu Pou!',
+  title: 'Tamagotchi Pro & Retro Arcade - Tu Experiencia Gaming Completa',
+  description: 'Modo Tamagotchi profesional con cuidado automático y Modo Retro Arcade con juegos clásicos optimizados. ¡Experiencia gaming sin límites!',
   generator: 'Next.js',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'Mi Pou Virtual'
+    title: 'Tamagotchi Pro & Retro Arcade'
   },
   formatDetection: {
     telephone: false

@@ -24,7 +24,7 @@ interface CompanionPet {
   id: string
   name: string
   image: string
-  type: 'chinchilla' | 'pez' | 'hamster' | 'pajaro' | 'conejo' | 'gato' | 'perro'
+  type: 'chinchilla' | 'pez' | 'hamster' | 'pajaro' | 'conejo' | 'gato' | 'perro' | 'tamagotchi'
   rarity: 'common' | 'rare' | 'epic' | 'legendary'
   stats: {
     loyalty: number
@@ -167,6 +167,22 @@ const AVAILABLE_PETS: CompanionPet[] = [
     abilities: ['Suavidad', 'Salto Acrobático'],
     personality: 'Adorable y acrobática',
     bonuses: { coins: 8, experience: 15, happiness: 25 }
+  },
+  {
+    id: 'tamagotchi',
+    name: 'Tama el Digital',
+    image: '/pet/mascota_tamagotchi.png',
+    type: 'tamagotchi',
+    rarity: 'epic',
+    stats: { loyalty: 88, happiness: 92, energy: 95 },
+    level: 1,
+    experience: 0,
+    experienceToNext: 250,
+    cost: 300,
+    unlocked: false,
+    abilities: ['Evolución Digital', 'Conexión Virtual'],
+    personality: 'Digital y evolutivo',
+    bonuses: { coins: 6, experience: 15, happiness: 18 }
   }
 ]
 

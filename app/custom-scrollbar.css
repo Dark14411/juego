@@ -1,0 +1,417 @@
+/* 🎮 ESTILOS PERSONALIZADOS PARA SCROLLBAR */
+
+/* Para navegadores basados en WebKit (Chrome, Safari, Edge) */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: #9333ea #1f1b3d;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: rgba(139, 92, 246, 0.1);
+  border-radius: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #9333ea, #7c3aed);
+  border-radius: 4px;
+  border: 1px solid rgba(147, 51, 234, 0.3);
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  border-color: rgba(124, 58, 237, 0.5);
+}
+
+.scrollbar-thin::-webkit-scrollbar-corner {
+  background: rgba(139, 92, 246, 0.1);
+}
+
+/* Para Firefox */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: #9333ea rgba(139, 92, 246, 0.1);
+}
+
+/* Asegurar que el contenido sea responsive y fluido */
+.main-content {
+  max-height: calc(100vh - 12rem);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Prevenir scroll durante el juego */
+.game-active {
+  overflow: hidden !important;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+.game-active .main-content {
+  overflow: hidden !important;
+}
+
+/* Asegurar que el scrollbar no se mueva durante el juego */
+.game-container {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Prevenir overflow horizontal en toda la aplicación */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Asegurar que los elementos no se salgan del viewport */
+* {
+  box-sizing: border-box;
+}
+
+/* Transiciones suaves para todos los elementos */
+* {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Mejorar la responsividad de las tarjetas */
+@media (max-width: 768px) {
+  .responsive-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .main-content {
+    max-height: calc(100vh - 8rem);
+  }
+}
+
+@media (max-width: 1024px) {
+  .responsive-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Animaciones suaves para hover y focus */
+.interactive-element {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, scale 0.2s ease;
+}
+
+.interactive-element:hover {
+  transform: translateY(-2px);
+  scale: 1.02;
+}
+
+.interactive-element:active {
+  transform: translateY(0);
+  scale: 0.98;
+}
+
+/* Mejoras para la accesibilidad */
+.focus-visible {
+  outline: 2px solid #9333ea;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Indicadores de loading y feedback visual */
+.loading-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Gradientes personalizados para consistencia */
+.gradient-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.gradient-secondary {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.gradient-success {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.gradient-warning {
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+}
+
+.gradient-danger {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+}
+
+/* 🎮 ANIMACIONES DE FEEDBACK VISUAL */
+
+/* Animación para cuando stats suben */
+@keyframes statIncrease {
+  0% { transform: scale(1); background-color: rgba(34, 197, 94, 0.3); }
+  50% { transform: scale(1.05); background-color: rgba(34, 197, 94, 0.6); }
+  100% { transform: scale(1); background-color: transparent; }
+}
+
+/* Animación para cuando stats bajan */
+@keyframes statDecrease {
+  0% { transform: scale(1); background-color: rgba(239, 68, 68, 0.3); }
+  50% { transform: scale(0.95); background-color: rgba(239, 68, 68, 0.6); }
+  100% { transform: scale(1); background-color: transparent; }
+}
+
+/* Animación de monedas ganadas */
+@keyframes coinEarned {
+  0% { 
+    transform: translateY(0) scale(1); 
+    opacity: 1; 
+    color: #fbbf24; 
+  }
+  50% { 
+    transform: translateY(-20px) scale(1.2); 
+    opacity: 1; 
+    color: #f59e0b; 
+  }
+  100% { 
+    transform: translateY(-40px) scale(1); 
+    opacity: 0; 
+    color: #d97706; 
+  }
+}
+
+/* Animación de level up */
+@keyframes levelUp {
+  0% { 
+    transform: scale(1) rotate(0deg); 
+    box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.7); 
+  }
+  25% { 
+    transform: scale(1.1) rotate(5deg); 
+    box-shadow: 0 0 0 10px rgba(251, 191, 36, 0.3); 
+  }
+  50% { 
+    transform: scale(1.2) rotate(-5deg); 
+    box-shadow: 0 0 0 20px rgba(251, 191, 36, 0.1); 
+  }
+  75% { 
+    transform: scale(1.1) rotate(3deg); 
+    box-shadow: 0 0 0 30px rgba(251, 191, 36, 0.05); 
+  }
+  100% { 
+    transform: scale(1) rotate(0deg); 
+    box-shadow: 0 0 0 40px rgba(251, 191, 36, 0); 
+  }
+}
+
+/* Animación de compra exitosa */
+@keyframes purchaseSuccess {
+  0% { 
+    transform: scale(1); 
+    background: linear-gradient(135deg, #10b981, #059669); 
+  }
+  25% { 
+    transform: scale(1.05); 
+    background: linear-gradient(135deg, #34d399, #10b981); 
+  }
+  50% { 
+    transform: scale(1.1); 
+    background: linear-gradient(135deg, #6ee7b7, #34d399); 
+  }
+  75% { 
+    transform: scale(1.05); 
+    background: linear-gradient(135deg, #34d399, #10b981); 
+  }
+  100% { 
+    transform: scale(1); 
+    background: linear-gradient(135deg, #10b981, #059669); 
+  }
+}
+
+/* Efecto de brillo para elementos especiales */
+@keyframes shine {
+  0% { 
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3); 
+  }
+  50% { 
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.6), 0 0 30px rgba(139, 92, 246, 0.4); 
+  }
+  100% { 
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3); 
+  }
+}
+
+/* Efecto de floating para elementos importantes */
+@keyframes float {
+  0%, 100% { 
+    transform: translateY(0px); 
+  }
+  50% { 
+    transform: translateY(-10px); 
+  }
+}
+
+/* Efecto de glow para elementos legendary */
+@keyframes legendaryGlow {
+  0%, 100% { 
+    box-shadow: 0 0 5px #fbbf24, 0 0 10px #fbbf24, 0 0 15px #fbbf24; 
+  }
+  50% { 
+    box-shadow: 0 0 10px #fbbf24, 0 0 20px #fbbf24, 0 0 30px #fbbf24, 0 0 40px #fbbf24; 
+  }
+}
+
+/* Clases para aplicar animaciones */
+.stat-increase {
+  animation: statIncrease 0.6s ease-out;
+}
+
+.stat-decrease {
+  animation: statDecrease 0.6s ease-out;
+}
+
+.coin-earned {
+  animation: coinEarned 1s ease-out forwards;
+  position: absolute;
+  font-weight: bold;
+  font-size: 1.2rem;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.level-up {
+  animation: levelUp 1.5s ease-out;
+}
+
+.purchase-success {
+  animation: purchaseSuccess 0.8s ease-out;
+}
+
+.shine-effect {
+  animation: shine 2s ease-in-out infinite;
+}
+
+.float-effect {
+  animation: float 3s ease-in-out infinite;
+}
+
+.legendary-glow {
+  animation: legendaryGlow 2s ease-in-out infinite;
+}
+
+/* Transiciones suaves para barras de progreso */
+.progress-bar {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-bar.increasing {
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.progress-bar.decreasing {
+  transition: all 0.6s cubic-bezier(0.55, 0.085, 0.68, 0.53);
+}
+
+/* Efectos para botones de acción */
+.action-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.action-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.action-button:hover::before {
+  left: 100%;
+}
+
+.action-button:active {
+  transform: scale(0.95);
+}
+
+/* Indicadores de cooldown */
+.cooldown-indicator {
+  position: relative;
+  overflow: hidden;
+}
+
+.cooldown-indicator::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  transition: width 1s linear;
+}
+
+/* Efectos de partículas para eventos especiales */
+@keyframes particle {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #fbbf24;
+  border-radius: 50%;
+  animation: particle 2s linear forwards;
+  pointer-events: none;
+}
+
+/* Efectos de selección para items de tienda */
+.store-item {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.store-item:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.store-item.selected {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+}
+
+.store-item.purchased {
+  opacity: 0.8;
+  transform: none;
+}
+
+.store-item.purchased::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  color: #10b981;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}

@@ -34,11 +34,11 @@ import {
   Settings,
   Play,
   Award,
-  Gift
+  Gift,
+  Smartphone
 } from 'lucide-react'
 
-// 🎮 IMPORTAR MINIJUEGOS
-import SnakeGame from '@/components/games/Snake'
+// 🎮 IMPORTAR MINIJUEGOS RETRO ARCADE
 import MemoryGame from '@/components/games/Memory'
 import PongGame from '@/components/games/Pong'
 import SimonGame from '@/components/games/Simon'
@@ -50,11 +50,9 @@ import Game2048 from '@/components/games/Game2048'
 import { useLocalStorage, useRealTime, usePageVisibility } from '@/hooks/use-hydration-safe'
 
 // 🎮 IMPORTAR SISTEMAS AVANZADOS
-import AvatarSystem from '@/components/avatar-system'
-import ScenarioSystem from '@/components/scenario-system'
-import ThemeSystem from '@/components/theme-system'
-import PetCompanions from '@/components/pet-companions'
-import EpicMarketplace from '@/components/epic-marketplace'
+import TamagotchiModePanel from '@/components/tamagotchi-mode-panel'
+import ArcadeModePanel from '@/components/arcade-mode-panel'
+import ProStorePanel from '@/components/pro-store-panel'
 import { 
   ParticleSystem, 
   VisualFeedback, 
@@ -62,6 +60,7 @@ import {
   AnimatedButton,
   AnimationStyles 
 } from '@/components/ui/animations'
+
 
 // 🎮 INTERFACES DEL JUEGO
 interface PetStats {
@@ -686,76 +685,41 @@ export default function EpicPouGame() {
     }
   }, [pet.experience, pet.experienceToNext])
 
-  // 🎮 NAVEGACIÓN EXPANDIDA
+  // 🎮 NAVEGACIÓN PRINCIPAL - DOS MODOS SEPARADOS
   const navigationItems = [
-    { id: 'home', label: 'Inicio', icon: Home },
-    { id: 'games', label: 'Minijuegos', icon: Gamepad2 },
-    { id: 'companions', label: 'Compañeros', icon: Heart },
-    { id: 'marketplace', label: 'Tienda', icon: ShoppingCart },
-    { id: 'customize', label: 'Personalizar', icon: Palette },
-    { id: 'avatars', label: 'Avatares', icon: User },
-    { id: 'scenarios', label: 'Escenarios', icon: Target },
-    { id: 'themes', label: 'Temas', icon: Sparkles },
-    { id: 'achievements', label: 'Logros', icon: Trophy },
-    { id: 'profile', label: 'Perfil', icon: Settings }
+    { id: 'home', label: '🏠 Inicio', icon: Home },
+    { id: 'tamagotchi-mode', label: '🐾 Modo Tamagotchi', icon: Smartphone },
+    { id: 'arcade-mode', label: '🕹️ Modo Retro Arcade', icon: Gamepad2 },
+    { id: 'store', label: '🛒 Tienda Pro', icon: ShoppingCart },
+    { id: 'achievements', label: '🏆 Logros', icon: Trophy },
+    { id: 'profile', label: '⚙️ Perfil', icon: Settings }
   ]
 
   const renderActiveContent = () => {
     switch (activeTab) {
       case 'home':
         return <HomePanel />
-      case 'games':
-        return <GamesPanel />
-      case 'companions':
-        return (
-          <PetCompanions
-            playerCoins={pet.coins}
-            playerLevel={pet.level}
-            currentCompanions={companionPets}
-            onAdoptPet={handleAdoptPet}
-            onSelectCompanion={handleSelectCompanion}
-            onRemoveCompanion={handleRemoveCompanion}
-          />
-        )
-      case 'marketplace':
-        return (
-          <EpicMarketplace
-            playerCoins={pet.coins}
-            playerGems={pet.gems}
-            playerLevel={pet.level}
-            ownedItems={ownedItems}
-            onPurchaseItem={handlePurchaseItem}
-          />
-        )
-      case 'customize':
-        return <CustomizePanel />
-      case 'avatars':
-        return (
-          <AvatarSystem 
-            currentAvatarId={currentAvatarId}
-            onAvatarChange={setCurrentAvatarId}
-            playerCoins={pet.coins}
-            onSpendCoins={(amount) => setPet(prev => ({ ...prev, coins: Math.max(0, prev.coins - amount) }))}
-          />
-        )
-      case 'scenarios':
-        return (
-          <ScenarioSystem
-            currentScenarioId={currentScenarioId}
-            onScenarioChange={setCurrentScenarioId}
-            playerLevel={pet.level}
-            playerScore={gameScores.reduce((total, score) => total + score.score, 0)}
-          />
-        )
-      case 'themes':
-        return (
-          <ThemeSystem
-            currentTheme={currentTheme}
-            onThemeChange={setCurrentTheme}
-            playerCoins={pet.coins}
-            onSpendCoins={(amount) => setPet(prev => ({ ...prev, coins: Math.max(0, prev.coins - amount) }))}
-          />
-        )
+      case 'tamagotchi-mode':
+        return <TamagotchiModePanel />
+      case 'arcade-mode':
+        return <ArcadeModePanel />
+      case 'store':
+        return <ProStorePanel 
+          playerCoins={pet.coins}
+          playerGems={pet.gems}
+          onPurchase={(item) => {
+            // Aplicar el cambio de color al Tamagotchi
+            if (item.category === 'colors') {
+              setPet(prev => ({
+                ...prev,
+                color: item.preview,
+                coins: item.currency === 'coins' ? prev.coins - item.price : prev.coins,
+                gems: item.currency === 'gems' ? prev.gems - item.price : prev.gems
+              }))
+              toast.success(`🎨 Color aplicado: ${item.name}`)
+            }
+          }}
+        />
       case 'achievements':
         return <AchievementsPanel />
       case 'profile':
@@ -1116,7 +1080,6 @@ export default function EpicPouGame() {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
-              { id: 'snake', name: 'Snake', icon: '🐍', description: 'Come manzanas y crece', color: 'from-green-500 to-emerald-600' },
               { id: 'memory', name: 'Memorama', icon: '🧠', description: 'Encuentra las parejas', color: 'from-blue-500 to-cyan-600' },
               { id: 'pong', name: 'Pong', icon: '🏓', description: 'Juego clásico de ping pong', color: 'from-red-500 to-pink-600' },
               { id: 'simon', name: 'Simon Dice', icon: '🎯', description: 'Repite la secuencia', color: 'from-purple-500 to-indigo-600' },
@@ -1363,13 +1326,7 @@ export default function EpicPouGame() {
   // 🎮 RENDERIZAR MINIJUEGOS
   const renderGame = () => {
     switch (showGame) {
-      case 'snake':
-        return (
-          <SnakeGame
-            onGameEnd={(score, rewards) => handleGameReward('Snake', score, rewards)}
-            onClose={handleCloseGame}
-          />
-        )
+
       case 'memory':
         return (
           <MemoryGame
@@ -1418,16 +1375,16 @@ export default function EpicPouGame() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-900 to-red-900">
+    <div className={`min-h-screen bg-gradient-to-br from-purple-900 via-pink-900 to-red-900 overflow-x-hidden ${showGame ? 'game-active' : ''}`}>
       {/* 🎮 HEADER */}
       <header className="bg-black/30 backdrop-blur-md border-b border-white/20">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="text-4xl animate-pulse">🐾</div>
+              <div className="text-4xl animate-pulse">🎮</div>
               <div>
-                <h1 className="text-2xl font-bold text-white">Pou Épico</h1>
-                <p className="text-sm text-white/80">Tu mascota digital épica</p>
+                <h1 className="text-2xl font-bold text-white">Tamagotchi Pro & Retro Arcade</h1>
+                <p className="text-sm text-white/80">Experiencia gaming profesional completa</p>
               </div>
             </div>
             
@@ -1443,11 +1400,11 @@ export default function EpicPouGame() {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-6">
-        <div className="flex flex-col lg:flex-row gap-6">
+      <div className="container mx-auto px-4 py-6 max-w-7xl">
+        <div className="flex flex-col lg:flex-row gap-6 min-h-0">
           {/* 🎮 NAVEGACIÓN LATERAL */}
           <nav className={`
-            lg:w-64 bg-black/30 backdrop-blur-md rounded-xl p-4 border border-white/20
+            lg:w-64 bg-black/30 backdrop-blur-md rounded-xl p-4 border border-white/20 lg:sticky lg:top-6 lg:self-start
             ${isMobileMenuOpen ? 'block' : 'hidden lg:block'}
           `}>
             <div className="space-y-2">
@@ -1476,8 +1433,10 @@ export default function EpicPouGame() {
           </nav>
 
           {/* 🎮 CONTENIDO PRINCIPAL */}
-          <main className="flex-1">
-            {renderActiveContent()}
+          <main className="flex-1 min-w-0 overflow-auto">
+            <div className="max-h-[calc(100vh-12rem)] overflow-y-auto scrollbar-thin scrollbar-thumb-purple-600 scrollbar-track-purple-900/20">
+              {renderActiveContent()}
+            </div>
           </main>
         </div>
       </div>
