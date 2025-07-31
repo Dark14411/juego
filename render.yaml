@@ -1,12 +1,11 @@
 services:
   - type: web
-    name: superhero-game
+    name: retro-arcade-game
     env: node
-    plan: free
-    buildCommand: npm install && npm run build
-    startCommand: node app.js
+    buildCommand: npm install
+    startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
-      - key: NEXT_TELEMETRY_DISABLED
-        value: "1" 
+      - key: PORT
+        value: 10000

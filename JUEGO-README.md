@@ -8,22 +8,30 @@ Juego retro arcade completo en HTML, CSS y JavaScript puro con **Pou virtual** y
 
 ## ⚡ Inicio Rápido
 
-### Método 1: Servidor Node.js (Recomendado)
+### Método 1: Servidor Python (Recomendado)
 ```bash
-# Instalar dependencias
-npm install
+# Navegar al directorio
+cd superhero-game-clean
 
 # Iniciar servidor
-npm start
+python simple-server.py
 
 # Abrir en navegador
-# http://localhost:10000
+# http://localhost:8080/retro-arcade-game.html
 ```
 
 ### Método 2: Directo en navegador
 ```bash
 # Simplemente abre el archivo
 retro-arcade-game.html
+```
+
+### Método 3: Node.js
+```bash
+# Si tienes Node.js instalado
+npx http-server . -p 8080
+
+# Ir a http://localhost:8080/retro-arcade-game.html
 ```
 
 ## 🐾 Sistema Pou
@@ -45,18 +53,16 @@ retro-arcade-game.html
 ## 🎮 Controles
 
 ### Snake:
-- **PC**: Flechas o WASD
-- **Móvil**: Botones en pantalla
+- **Flechas del teclado**: Movimiento
 - **Objetivo**: Come la comida roja, evita chocar
 
 ### Pong:
-- **PC**: W/S o Flechas Arriba/Abajo
-- **Móvil**: Botones en pantalla
+- **W**: Mover raqueta arriba
+- **S**: Mover raqueta abajo
 - **Objetivo**: Anota 5 puntos para ganar
 
 ### Tic-Tac-Toe:
-- **PC**: Click o Teclado Numérico (1-9)
-- **Móvil**: Tocar casillas
+- **Click**: Colocar X en casilla vacía
 - **Objetivo**: Conseguir 3 en línea
 
 ## 🎨 Características Técnicas
@@ -66,15 +72,13 @@ retro-arcade-game.html
 - **CSS3** con animaciones y gradientes
 - **JavaScript ES6+** vanilla
 - **Google Fonts** (Press Start 2P)
-- **Express** (servidor ligero)
 
 ### ✅ Funcionalidades:
-- **Responsive Design**: Optimizado para PC y móviles
+- **Responsive Design**: Funciona en móvil y desktop
 - **Persistencia**: localStorage para guardar progreso
 - **Animaciones CSS**: Efectos retro y brillos
 - **IA**: Oponentes inteligentes en Pong y Tic-Tac-Toe
 - **Sistema de puntuación**: Integrado con stats del Pou
-- **Controles táctiles**: Botones virtuales en móviles
 
 ### ✅ Estilo Retro:
 - Colores neón vibrantes
@@ -86,9 +90,18 @@ retro-arcade-game.html
 ## 🚀 Despliegue en Producción
 
 ### Render.com:
-1. Conectar repositorio a Render
-2. Usar configuración en render.yaml
-3. Despliegue automático
+1. Subir archivos a GitHub
+2. Conectar repositorio a Render
+3. Usar `python simple-server.py` como comando de inicio
+
+### Vercel:
+1. Subir `retro-arcade-game.html` 
+2. Renombrar a `index.html`
+3. Deploy automático
+
+### Netlify:
+1. Arrastrar carpeta con archivos
+2. Deploy instantáneo
 
 ## 🔧 Desarrollo
 
@@ -96,24 +109,29 @@ retro-arcade-game.html
 ```
 superhero-game-clean/
 ├── retro-arcade-game.html    # Juego principal (TODO EN UNO)
-├── server.js                # Servidor Express
-├── package.json             # Configuración del proyecto
-└── README.md                # Este archivo
+├── simple-server.py          # Servidor Python opcional
+└── JUEGO-README.md          # Este archivo
 ```
 
 ### Modificaciones:
-- Todo el código del juego está en `retro-arcade-game.html`
+- Todo el código está en `retro-arcade-game.html`
 - CSS embebido en `<style>`
 - JavaScript embebido en `<script>`
 - Sin dependencias externas (excepto Google Fonts)
-- Servidor Express para despliegue fácil
+
+## 🎯 Próximas Mejoras Posibles
+- [ ] Sonidos retro (Web Audio API)
+- [ ] Más minijuegos (Tetris, Breakout)
+- [ ] Tabla de puntuaciones globales
+- [ ] Temas personalizables
+- [ ] Logros y medallas
 
 ## 📞 Soporte
 - **Sin errores en consola**: ✅ Verificado
 - **Totalmente funcional**: ✅ Probado
 - **Listo para producción**: ✅ Optimizado
-- **Compatible con móviles**: ✅ Responsive
 
 ---
 
 ### 🎮 ¡Disfruta el juego retro!
+**Desarrollado con Cursor AI PRO MAX**
