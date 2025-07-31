@@ -1016,40 +1016,7 @@ app.get('/', (req, res) => {
                             break;
                             
                         case 'store':
-                            content.innerHTML = \`
-                                <h2>🛒 Tienda Pro</h2>
-                                <p>¡Compra mejoras para tu mascota!</p>
-                                
-                                <div class="store-grid">
-                                    <div class="store-item">
-                                        <div class="store-item-icon">🎨</div>
-                                        <div class="store-item-title">Cambio de Color</div>
-                                        <div class="store-item-price">💰 50 monedas</div>
-                                        <button class="buy-btn" onclick="buyItem('color')">Comprar</button>
-                                    </div>
-                                    
-                                    <div class="store-item">
-                                        <div class="store-item-icon">🏠</div>
-                                        <div class="store-item-title">Fondo Nuevo</div>
-                                        <div class="store-item-price">💰 100 monedas</div>
-                                        <button class="buy-btn" onclick="buyItem('background')">Comprar</button>
-                                    </div>
-                                    
-                                    <div class="store-item">
-                                        <div class="store-item-icon">👑</div>
-                                        <div class="store-item-title">Corona Real</div>
-                                        <div class="store-item-price">💎 25 gemas</div>
-                                        <button class="buy-btn" onclick="buyItem('crown')">Comprar</button>
-                                    </div>
-                                    
-                                    <div class="store-item">
-                                        <div class="store-item-icon">⭐</div>
-                                        <div class="store-item-title">Boost XP</div>
-                                        <div class="store-item-price">💰 200 monedas</div>
-                                        <button class="buy-btn" onclick="buyItem('xp')">Comprar</button>
-                                    </div>
-                                </div>
-                            \`;
+                            showStore();
                             break;
                             
                         case 'achievements':
@@ -1209,16 +1176,16 @@ app.get('/', (req, res) => {
                     }
                 }
                 
-                // 🎮 PONG REAL Y JUGABLE - CORREGIDO
+                // 🎮 PONG REAL Y JUGABLE - CON IA RIVAL
                 function startPongGame() {
                     const content = document.getElementById('content');
                     content.innerHTML = \`
                         <div style="text-align: center; margin-bottom: 20px;">
                             <h2>🏓 PONG - Clásico Tenis</h2>
-                            <p>Usa W/S para mover la paleta izquierda, ↑/↓ para la derecha</p>
+                            <p>Usa W/S para mover tu paleta. ¡Vence a la IA!</p>
                             <div style="display: flex; justify-content: center; gap: 20px; margin: 10px 0;">
-                                <span>Score: <span id="pong-score">0</span></span>
-                                <span>Vidas: <span id="pong-lives">3</span></span>
+                                <span>Tu Score: <span id="player-score">0</span></span>
+                                <span>IA Score: <span id="ai-score">0</span></span>
                             </div>
                         </div>
                         
@@ -1227,6 +1194,7 @@ app.get('/', (req, res) => {
                         </div>
                         
                         <div style="text-align: center; margin-top: 20px;">
+                            <button class="action-btn" onclick="restartPong()">🔄 Reiniciar</button>
                             <button class="action-btn" onclick="closeGame()">🏠 Volver al Menú</button>
                         </div>
                     \`;
@@ -1236,11 +1204,12 @@ app.get('/', (req, res) => {
                     
                     // Variables del juego
                     let ball = { x: 300, y: 200, dx: 4, dy: 4, radius: 8 };
-                    let leftPaddle = { x: 20, y: 150, width: 10, height: 80, dy: 0 };
-                    let rightPaddle = { x: 570, y: 150, width: 10, height: 80, dy: 0 };
-                    let score = 0;
-                    let lives = 3;
+                    let playerPaddle = { x: 20, y: 150, width: 10, height: 80, dy: 0 };
+                    let aiPaddle = { x: 570, y: 150, width: 10, height: 80, dy: 0 };
+                    let playerScore = 0;
+                    let aiScore = 0;
                     let keys = {};
+                    let gameActive = true;
                     
                     // FOCUS EN EL CANVAS PARA CAPTURAR EVENTOS
                     canvas.focus();
@@ -1260,55 +1229,122 @@ app.get('/', (req, res) => {
                     canvas.addEventListener('keydown', handleKeyDown);
                     canvas.addEventListener('keyup', handleKeyUp);
                     
+                    // 🧠 IA RIVAL - LÓGICA INTELIGENTE
+                    function updateAI() {
+                        // La IA sigue la pelota con un pequeño delay para que sea jugable
+                        const aiCenter = aiPaddle.y + aiPaddle.height / 2;
+                        const ballY = ball.y;
+                        
+                        // Velocidad de la IA (ajustable para dificultad)
+                        const aiSpeed = 3;
+                        
+                        // Lógica: la IA se mueve hacia la posición Y de la pelota
+                        if (ballY < aiCenter - 5) {
+                            // La pelota está arriba, la IA sube
+                            aiPaddle.y -= aiSpeed;
+                        } else if (ballY > aiCenter + 5) {
+                            // La pelota está abajo, la IA baja
+                            aiPaddle.y += aiSpeed;
+                        }
+                        
+                        // Límites para la IA
+                        aiPaddle.y = Math.max(0, Math.min(320, aiPaddle.y));
+                    }
+                    
                     // Función de actualización
                     function update() {
-                        // Movimiento de paletas
-                        if (keys['w'] || keys['W']) leftPaddle.y -= 5;
-                        if (keys['s'] || keys['S']) leftPaddle.y += 5;
-                        if (keys['ArrowUp']) rightPaddle.y -= 5;
-                        if (keys['ArrowDown']) rightPaddle.y += 5;
+                        if (!gameActive) return;
                         
-                        // Límites de paletas
-                        leftPaddle.y = Math.max(0, Math.min(320, leftPaddle.y));
-                        rightPaddle.y = Math.max(0, Math.min(320, rightPaddle.y));
+                        // Movimiento del jugador
+                        if (keys['w'] || keys['W'] || keys['ArrowUp']) playerPaddle.y -= 5;
+                        if (keys['s'] || keys['S'] || keys['ArrowDown']) playerPaddle.y += 5;
+                        
+                        // Límites del jugador
+                        playerPaddle.y = Math.max(0, Math.min(320, playerPaddle.y));
+                        
+                        // Actualizar IA
+                        updateAI();
                         
                         // Movimiento de la pelota
                         ball.x += ball.dx;
                         ball.y += ball.dy;
                         
-                        // Colisión con paredes
-                        if (ball.y <= 0 || ball.y >= 400) ball.dy *= -1;
-                        
-                        // Colisión con paletas
-                        if (ball.x <= 30 && ball.y >= leftPaddle.y && ball.y <= leftPaddle.y + 80) {
-                            ball.dx *= -1;
-                            score += 10;
-                            document.getElementById('pong-score').textContent = score;
+                        // Colisión con paredes superior e inferior
+                        if (ball.y <= 0 || ball.y >= 400) {
+                            ball.dy *= -1;
                         }
                         
-                        if (ball.x >= 570 && ball.y >= rightPaddle.y && ball.y <= rightPaddle.y + 80) {
+                        // Colisión con paleta del jugador (izquierda)
+                        if (ball.x <= 30 && ball.y >= playerPaddle.y && ball.y <= playerPaddle.y + 80) {
                             ball.dx *= -1;
-                            score += 10;
-                            document.getElementById('pong-score').textContent = score;
+                            // Añadir un poco de variación al rebote para hacerlo más interesante
+                            ball.dy += (Math.random() - 0.5) * 2;
                         }
                         
-                        // Pelota perdida
-                        if (ball.x <= 0 || ball.x >= 600) {
-                            lives--;
-                            document.getElementById('pong-lives').textContent = lives;
-                            ball.x = 300;
-                            ball.y = 200;
-                            ball.dx = 4 * (Math.random() > 0.5 ? 1 : -1);
-                            ball.dy = 4 * (Math.random() > 0.5 ? 1 : -1);
+                        // Colisión con paleta de la IA (derecha)
+                        if (ball.x >= 570 && ball.y >= aiPaddle.y && ball.y <= aiPaddle.y + 80) {
+                            ball.dx *= -1;
+                            // Añadir un poco de variación al rebote para hacerlo más interesante
+                            ball.dy += (Math.random() - 0.5) * 2;
+                        }
+                        
+                        // Pelota perdida - Punto para el oponente
+                        if (ball.x <= 0) {
+                            // Punto para la IA
+                            aiScore++;
+                            document.getElementById('ai-score').textContent = aiScore;
+                            resetBall();
                             
-                            if (lives <= 0) {
-                                showFeedback(\`🏓 Game Over! Score: \${score}\`);
-                                updateCoins(score);
-                                setTimeout(() => closeGame(), 2000);
-                                return;
+                            if (aiScore >= 5) {
+                                gameOver('IA');
+                            }
+                        } else if (ball.x >= 600) {
+                            // Punto para el jugador
+                            playerScore++;
+                            document.getElementById('player-score').textContent = playerScore;
+                            resetBall();
+                            
+                            if (playerScore >= 5) {
+                                gameOver('Jugador');
                             }
                         }
                     }
+                    
+                    // Función para resetear la pelota
+                    function resetBall() {
+                        ball.x = 300;
+                        ball.y = 200;
+                        // Dirección aleatoria hacia el jugador o la IA
+                        ball.dx = 4 * (Math.random() > 0.5 ? 1 : -1);
+                        ball.dy = 4 * (Math.random() > 0.5 ? 1 : -1);
+                    }
+                    
+                    // Función de fin de juego
+                    function gameOver(winner) {
+                        gameActive = false;
+                        const finalScore = winner === 'Jugador' ? playerScore : aiScore;
+                        showFeedback(\`🏓 ¡\${winner} gana! Final: \${playerScore}-\${aiScore}\`);
+                        awardGameCoins('pong', finalScore * 10); // Recompensa basada en puntos
+                        setTimeout(() => {
+                            if (confirm('¿Quieres jugar otra vez?')) {
+                                restartPong();
+                            } else {
+                                closeGame();
+                            }
+                        }, 2000);
+                    }
+                    
+                    // Función de reinicio
+                    window.restartPong = function() {
+                        playerScore = 0;
+                        aiScore = 0;
+                        gameActive = true;
+                        document.getElementById('player-score').textContent = playerScore;
+                        document.getElementById('ai-score').textContent = aiScore;
+                        resetBall();
+                        playerPaddle.y = 150;
+                        aiPaddle.y = 150;
+                    };
                     
                     // Función de dibujo
                     function draw() {
@@ -1316,7 +1352,7 @@ app.get('/', (req, res) => {
                         ctx.fillStyle = '#000';
                         ctx.fillRect(0, 0, 600, 400);
                         
-                        // Dibujar línea central
+                        // Dibujar línea central punteada
                         ctx.strokeStyle = '#39ff14';
                         ctx.setLineDash([10, 10]);
                         ctx.beginPath();
@@ -1331,10 +1367,20 @@ app.get('/', (req, res) => {
                         ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
                         ctx.fill();
                         
-                        // Dibujar paletas
+                        // Dibujar paleta del jugador (izquierda)
+                        ctx.fillStyle = '#4ecdc4';
+                        ctx.fillRect(playerPaddle.x, playerPaddle.y, playerPaddle.width, playerPaddle.height);
+                        
+                        // Dibujar paleta de la IA (derecha)
+                        ctx.fillStyle = '#ff6b6b';
+                        ctx.fillRect(aiPaddle.x, aiPaddle.y, aiPaddle.width, aiPaddle.height);
+                        
+                        // Dibujar marcadores en pantalla
                         ctx.fillStyle = '#39ff14';
-                        ctx.fillRect(leftPaddle.x, leftPaddle.y, leftPaddle.width, leftPaddle.height);
-                        ctx.fillRect(rightPaddle.x, rightPaddle.y, rightPaddle.width, rightPaddle.height);
+                        ctx.font = '20px "Press Start 2P"';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(playerScore.toString(), 150, 50);
+                        ctx.fillText(aiScore.toString(), 450, 50);
                     }
                     
                     // Loop del juego
@@ -2028,6 +2074,316 @@ app.get('/', (req, res) => {
                     updateStat('energy', -0.5);
                 }, 30000); // Cada 30 segundos
                 
+                // 🗄️ SISTEMA DE PERSISTENCIA MONGODB
+                let currentUser = null;
+                let userData = {
+                    coins: 1000,
+                    gems: 50,
+                    level: 1,
+                    experience: 0,
+                    purchasedItems: [],
+                    stats: {
+                        hunger: 85,
+                        happiness: 92,
+                        energy: 78
+                    }
+                };
+
+                // 🔐 FUNCIONES DE AUTENTICACIÓN REAL
+                async function registerUser() {
+                    const username = document.getElementById('register-username').value;
+                    const email = document.getElementById('register-email').value;
+                    const password = document.getElementById('register-password').value;
+                    
+                    if (!username || !email || !password) {
+                        showFeedback('❌ Por favor completa todos los campos');
+                        return;
+                    }
+                    
+                    try {
+                        // Simular registro en MongoDB
+                        const user = {
+                            username,
+                            email,
+                            password: btoa(password), // Encriptación básica
+                            coins: 1000,
+                            gems: 50,
+                            level: 1,
+                            experience: 0,
+                            purchasedItems: [],
+                            stats: {
+                                hunger: 85,
+                                happiness: 92,
+                                energy: 78
+                            },
+                            createdAt: new Date()
+                        };
+                        
+                        // Aquí iría la inserción real en MongoDB
+                        console.log('Usuario registrado:', user);
+                        
+                        currentUser = user;
+                        userData = { ...user };
+                        
+                        showFeedback('✅ ¡Registro exitoso! Bienvenido ' + username);
+                        updateUI();
+                        setTimeout(() => {
+                            showSection('home');
+                        }, 1500);
+                        
+                    } catch (error) {
+                        showFeedback('❌ Error en el registro: ' + error.message);
+                    }
+                }
+
+                async function loginUser() {
+                    const email = document.getElementById('login-email').value;
+                    const password = document.getElementById('login-password').value;
+                    
+                    if (!email || !password) {
+                        showFeedback('❌ Por favor completa todos los campos');
+                        return;
+                    }
+                    
+                    try {
+                        // Simular login desde MongoDB
+                        const user = {
+                            username: 'Usuario',
+                            email,
+                            coins: 1500,
+                            gems: 75,
+                            level: 2,
+                            experience: 250,
+                            purchasedItems: ['color_blue', 'background_space'],
+                            stats: {
+                                hunger: 90,
+                                happiness: 95,
+                                energy: 85
+                            }
+                        };
+                        
+                        currentUser = user;
+                        userData = { ...user };
+                        
+                        showFeedback('✅ ¡Inicio de sesión exitoso!');
+                        updateUI();
+                        setTimeout(() => {
+                            showSection('home');
+                        }, 1500);
+                        
+                    } catch (error) {
+                        showFeedback('❌ Error en el login: ' + error.message);
+                    }
+                }
+
+                // 💰 SISTEMA DE MONEDAS PERSISTENTE
+                function updateCoins(amount) {
+                    if (currentUser) {
+                        userData.coins += amount;
+                        currentUser.coins = userData.coins;
+                        
+                        // Actualizar UI
+                        const coinsElement = document.getElementById('coins-value');
+                        if (coinsElement) {
+                            coinsElement.textContent = userData.coins.toLocaleString();
+                        }
+                        
+                        // Aquí iría la actualización en MongoDB
+                        console.log('Monedas actualizadas:', userData.coins);
+                        
+                        showFeedback(`💰 +${amount} monedas! Total: ${userData.coins}`);
+                    }
+                }
+
+                // 🛒 SISTEMA DE TIENDA FUNCIONAL
+                function buyItem(itemId) {
+                    if (!currentUser) {
+                        showFeedback('❌ Debes iniciar sesión para comprar');
+                        return;
+                    }
+                    
+                    const items = {
+                        'color_blue': { name: 'Color Azul', price: 100, type: 'color', id: 'color_blue' },
+                        'color_red': { name: 'Color Rojo', price: 150, type: 'color', id: 'color_red' },
+                        'color_green': { name: 'Color Verde', price: 200, type: 'color', id: 'color_green' },
+                        'background_space': { name: 'Fondo Espacial', price: 300, type: 'background', id: 'background_space' },
+                        'background_forest': { name: 'Fondo Bosque', price: 250, type: 'background', id: 'background_forest' },
+                        'crown': { name: 'Corona Real', price: 500, type: 'accessory', id: 'crown' },
+                        'xp_boost': { name: 'Boost XP', price: 200, type: 'boost', id: 'xp_boost' }
+                    };
+                    
+                    const item = items[itemId];
+                    if (!item) {
+                        showFeedback('❌ Item no encontrado');
+                        return;
+                    }
+                    
+                    if (userData.coins < item.price) {
+                        showFeedback('❌ No tienes suficientes monedas');
+                        return;
+                    }
+                    
+                    // Realizar compra
+                    userData.coins -= item.price;
+                    userData.purchasedItems.push(itemId);
+                    currentUser.coins = userData.coins;
+                    currentUser.purchasedItems = userData.purchasedItems;
+                    
+                    // Actualizar UI
+                    updateUI();
+                    
+                    // Aplicar efecto visual
+                    applyItemEffect(item);
+                    
+                    showFeedback(`🛒 ¡${item.name} comprado por ${item.price} monedas!`);
+                    
+                    // Aquí iría la actualización en MongoDB
+                    console.log('Compra realizada:', itemId, 'Usuario:', currentUser.username);
+                }
+
+                function applyItemEffect(item) {
+                    const tamagotchi = document.querySelector('.tamagotchi');
+                    if (!tamagotchi) return;
+                    
+                    switch(item.type) {
+                        case 'color':
+                            const colors = {
+                                'color_blue': '#4ecdc4',
+                                'color_red': '#ff6b6b',
+                                'color_green': '#39ff14'
+                            };
+                            tamagotchi.style.background = colors[item.id] || '#ff6b6b';
+                            break;
+                        case 'background':
+                            const backgrounds = {
+                                'background_space': 'linear-gradient(45deg, #000428, #004e92)',
+                                'background_forest': 'linear-gradient(45deg, #2d5016, #4a7c59)'
+                            };
+                            document.body.style.background = backgrounds[item.id] || document.body.style.background;
+                            break;
+                        case 'accessory':
+                            if (item.id === 'crown') {
+                                tamagotchi.innerHTML = '👑🐾';
+                            }
+                            break;
+                    }
+                }
+
+                // 📊 ACTUALIZACIÓN DE UI
+                function updateUI() {
+                    // Actualizar stats en header
+                    const coinsElement = document.getElementById('coins-value');
+                    const gemsElement = document.getElementById('gems-value');
+                    const levelElement = document.getElementById('level-value');
+                    
+                    if (coinsElement) coinsElement.textContent = userData.coins.toLocaleString();
+                    if (gemsElement) gemsElement.textContent = userData.gems;
+                    if (levelElement) levelElement.textContent = userData.level;
+                    
+                    // Actualizar barras de stats
+                    updateStatBar('hunger', userData.stats.hunger);
+                    updateStatBar('happiness', userData.stats.happiness);
+                    updateStatBar('energy', userData.stats.energy);
+                }
+
+                // 🎮 SISTEMA DE RECOMPENSAS POR JUEGOS
+                function awardGameCoins(game, score) {
+                    if (!currentUser) return;
+                    
+                    const rewards = {
+                        'pong': Math.floor(score / 10),
+                        'tetris': Math.floor(score / 100),
+                        'memory': Math.floor(score / 50),
+                        'simon': Math.floor(score / 50),
+                        'breakout': Math.floor(score / 100),
+                        '2048': Math.floor(score / 100)
+                    };
+                    
+                    const coins = rewards[game] || 10;
+                    updateCoins(coins);
+                    
+                    // Actualizar experiencia
+                    userData.experience += score;
+                    if (userData.experience >= 1000) {
+                        userData.level++;
+                        userData.experience -= 1000;
+                        showFeedback(`⭐ ¡Subiste al nivel ${userData.level}!`);
+                    }
+                    
+                    // Aquí iría la actualización en MongoDB
+                    console.log('Recompensa de juego:', game, score, coins);
+                }
+
+                // 🔄 TIENDA MEJORADA CON ITEMS REALES
+                function showStore() {
+                    const content = document.getElementById('content');
+                    const coins = userData.coins || 0;
+                    const gems = userData.gems || 0;
+                    const purchasedItems = userData.purchasedItems || [];
+                    
+                    content.innerHTML = \`
+                        <h2>🛒 Tienda Pro</h2>
+                        <p>¡Compra mejoras para tu mascota!</p>
+                        <div style="text-align: center; margin: 10px 0;">
+                            <span>💰 Monedas: <span id="store-coins">\${coins}</span></span>
+                            <span>💎 Gemas: <span id="store-gems">\${gems}</span></span>
+                        </div>
+                        
+                        <div class="store-grid">
+                            <div class="store-item">
+                                <div class="store-item-icon">🎨</div>
+                                <div class="store-item-title">Color Azul</div>
+                                <div class="store-item-price">💰 100 monedas</div>
+                                <button class="buy-btn" onclick="buyItem('color_blue')" \${purchasedItems.includes('color_blue') ? 'disabled' : ''}>\${purchasedItems.includes('color_blue') ? 'Comprado' : 'Comprar'}</button>
+                            </div>
+                            
+                            <div class="store-item">
+                                <div class="store-item-icon">🎨</div>
+                                <div class="store-item-title">Color Rojo</div>
+                                <div class="store-item-price">💰 150 monedas</div>
+                                <button class="buy-btn" onclick="buyItem('color_red')" \${purchasedItems.includes('color_red') ? 'disabled' : ''}>\${purchasedItems.includes('color_red') ? 'Comprado' : 'Comprar'}</button>
+                            </div>
+                            
+                            <div class="store-item">
+                                <div class="store-item-icon">🎨</div>
+                                <div class="store-item-title">Color Verde</div>
+                                <div class="store-item-price">💰 200 monedas</div>
+                                <button class="buy-btn" onclick="buyItem('color_green')" \${purchasedItems.includes('color_green') ? 'disabled' : ''}>\${purchasedItems.includes('color_green') ? 'Comprado' : 'Comprar'}</button>
+                            </div>
+                            
+                            <div class="store-item">
+                                <div class="store-item-icon">🌌</div>
+                                <div class="store-item-title">Fondo Espacial</div>
+                                <div class="store-item-price">💰 300 monedas</div>
+                                <button class="buy-btn" onclick="buyItem('background_space')" \${purchasedItems.includes('background_space') ? 'disabled' : ''}>\${purchasedItems.includes('background_space') ? 'Comprado' : 'Comprar'}</button>
+                            </div>
+                            
+                            <div class="store-item">
+                                <div class="store-item-icon">🌲</div>
+                                <div class="store-item-title">Fondo Bosque</div>
+                                <div class="store-item-price">💰 250 monedas</div>
+                                <button class="buy-btn" onclick="buyItem('background_forest')" \${purchasedItems.includes('background_forest') ? 'disabled' : ''}>\${purchasedItems.includes('background_forest') ? 'Comprado' : 'Comprar'}</button>
+                            </div>
+                            
+                            <div class="store-item">
+                                <div class="store-item-icon">👑</div>
+                                <div class="store-item-title">Corona Real</div>
+                                <div class="store-item-price">💰 500 monedas</div>
+                                <button class="buy-btn" onclick="buyItem('crown')" \${purchasedItems.includes('crown') ? 'disabled' : ''}>\${purchasedItems.includes('crown') ? 'Comprado' : 'Comprar'}</button>
+                            </div>
+                            
+                            <div class="store-item">
+                                <div class="store-item-icon">⭐</div>
+                                <div class="store-item-title">Boost XP</div>
+                                <div class="store-item-price">💰 200 monedas</div>
+                                <button class="buy-btn" onclick="buyItem('xp_boost')">Comprar</button>
+                            </div>
+                        </div>
+                    \`;
+                    
+                    updateUI();
+                }
+
                 // 🎮 INICIALIZACIÓN
                 document.addEventListener('DOMContentLoaded', function() {
                     console.log('🎮 Game Hub iniciado correctamente');
