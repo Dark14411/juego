@@ -799,6 +799,9 @@ app.get('/', (req, res) => {
                         <div class="nav-item" onclick="showSection('profile')">
                             ⚙️ Perfil
                         </div>
+                        <div class="nav-item" onclick="showLoginForm()">
+                            🔐 Login
+                        </div>
                     </div>
                 </div>
                 
@@ -1206,7 +1209,7 @@ app.get('/', (req, res) => {
                     }
                 }
                 
-                // 🎮 PONG REAL Y JUGABLE
+                // 🎮 PONG REAL Y JUGABLE - CORREGIDO
                 function startPongGame() {
                     const content = document.getElementById('content');
                     content.innerHTML = \`
@@ -1220,7 +1223,7 @@ app.get('/', (req, res) => {
                         </div>
                         
                         <div style="display: flex; justify-content: center;">
-                            <canvas id="pong-canvas" width="600" height="400" style="border: 3px solid #39ff14; background: #000; border-radius: 10px;"></canvas>
+                            <canvas id="pong-canvas" width="600" height="400" style="border: 3px solid #39ff14; background: #000; border-radius: 10px; outline: none;" tabindex="0"></canvas>
                         </div>
                         
                         <div style="text-align: center; margin-top: 20px;">
@@ -1239,14 +1242,23 @@ app.get('/', (req, res) => {
                     let lives = 3;
                     let keys = {};
                     
-                    // Eventos de teclado
-                    document.addEventListener('keydown', (e) => {
-                        keys[e.key] = true;
-                    });
+                    // FOCUS EN EL CANVAS PARA CAPTURAR EVENTOS
+                    canvas.focus();
                     
-                    document.addEventListener('keyup', (e) => {
+                    // PREVENT DEFAULT EN TODOS LOS EVENTOS DE TECLADO
+                    function handleKeyDown(e) {
+                        e.preventDefault(); // PREVIENE SCROLL
+                        keys[e.key] = true;
+                    }
+                    
+                    function handleKeyUp(e) {
+                        e.preventDefault(); // PREVIENE SCROLL
                         keys[e.key] = false;
-                    });
+                    }
+                    
+                    // Eventos de teclado SOLO en el canvas
+                    canvas.addEventListener('keydown', handleKeyDown);
+                    canvas.addEventListener('keyup', handleKeyUp);
                     
                     // Función de actualización
                     function update() {
@@ -1335,7 +1347,7 @@ app.get('/', (req, res) => {
                     gameLoop();
                 }
                 
-                // 🎮 TETRIS REAL Y JUGABLE
+                // 🎮 TETRIS REAL Y JUGABLE - CORREGIDO
                 function startTetrisGame() {
                     const content = document.getElementById('content');
                     content.innerHTML = \`
@@ -1349,7 +1361,7 @@ app.get('/', (req, res) => {
                         </div>
                         
                         <div style="display: flex; justify-content: center;">
-                            <canvas id="tetris-canvas" width="300" height="600" style="border: 3px solid #39ff14; background: #000; border-radius: 10px;"></canvas>
+                            <canvas id="tetris-canvas" width="300" height="600" style="border: 3px solid #39ff14; background: #000; border-radius: 10px; outline: none;" tabindex="0"></canvas>
                         </div>
                         
                         <div style="text-align: center; margin-top: 20px;">
@@ -1359,6 +1371,9 @@ app.get('/', (req, res) => {
                     
                     const canvas = document.getElementById('tetris-canvas');
                     const ctx = canvas.getContext('2d');
+                    
+                    // FOCUS EN EL CANVAS
+                    canvas.focus();
                     
                     const BOARD_WIDTH = 10;
                     const BOARD_HEIGHT = 20;
@@ -1457,8 +1472,9 @@ app.get('/', (req, res) => {
                         }
                     }
                     
-                    // Eventos de teclado
-                    document.addEventListener('keydown', (e) => {
+                    // PREVENT DEFAULT EN EVENTOS DE TECLADO
+                    canvas.addEventListener('keydown', (e) => {
+                        e.preventDefault(); // PREVIENE SCROLL
                         if (!currentPiece) return;
                         
                         switch(e.key) {
