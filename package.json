@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start -p $PORT",
-    "start:render": "next start -p $PORT",
+    "start": "node server.js",
+    "start:render": "node server.js",
     "lint": "next lint",
     "export": "next export"
   },
