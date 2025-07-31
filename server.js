@@ -400,9 +400,104 @@ app.get('/tamagotchi', (req, res) => {
     res.redirect('/retro-arcade');
 });
 
-// Ruta para el juego original
+// Ruta para el juego original - redirigir a la aplicación Next.js
 app.get('/retro-arcade', (req, res) => {
-    res.sendFile(path.join(__dirname, 'retro-arcade-game.html'));
+    res.redirect('/');
+});
+
+// Ruta para servir archivos estáticos
+app.use('/static', express.static(path.join(__dirname, 'public')));
+app.use('/components', express.static(path.join(__dirname, 'components')));
+app.use('/app', express.static(path.join(__dirname, 'app')));
+
+// Ruta para servir la aplicación Next.js
+app.get('*', (req, res) => {
+    res.send(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>🎮 Tamagotchi Pro & Retro Arcade</title>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta name="description" content="Tamagotchi Pro & Retro Arcade - Tu Experiencia Gaming Completa">
+            <link rel="icon" href="/favicon.ico">
+            <style>
+                body {
+                    margin: 0;
+                    padding: 0;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    min-height: 100vh;
+                    text-align: center;
+                }
+                .loading {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 20px;
+                }
+                .spinner {
+                    width: 50px;
+                    height: 50px;
+                    border: 5px solid rgba(255,255,255,0.3);
+                    border-radius: 50%;
+                    border-top-color: #fff;
+                    animation: spin 1s ease-in-out infinite;
+                }
+                @keyframes spin {
+                    to { transform: rotate(360deg); }
+                }
+                h1 {
+                    font-size: 2rem;
+                    margin: 0;
+                    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+                }
+                p {
+                    font-size: 1.1rem;
+                    opacity: 0.8;
+                    margin: 10px 0;
+                }
+                .features {
+                    display: flex;
+                    gap: 20px;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    margin-top: 30px;
+                }
+                .feature {
+                    background: rgba(255,255,255,0.1);
+                    padding: 15px;
+                    border-radius: 10px;
+                    backdrop-filter: blur(10px);
+                    border: 1px solid rgba(255,255,255,0.2);
+                }
+            </style>
+        </head>
+        <body>
+            <div class="loading">
+                <div class="spinner"></div>
+                <h1>🎮 Tamagotchi Pro & Retro Arcade</h1>
+                <p>Cargando tu experiencia gaming completa...</p>
+                <div class="features">
+                    <div class="feature">🐾 Tamagotchi Virtual</div>
+                    <div class="feature">🕹️ Juegos Retro</div>
+                    <div class="feature">🛒 Tienda Pro</div>
+                    <div class="feature">🏆 Logros</div>
+                </div>
+            </div>
+            <script>
+                // Redirigir a la aplicación Next.js
+                setTimeout(() => {
+                    window.location.href = '/app';
+                }, 2000);
+            </script>
+        </body>
+        </html>
+    `);
 });
 
 // Iniciar servidor con manejo de errores
