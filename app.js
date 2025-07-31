@@ -12,20 +12,35 @@ const port = process.env.PORT || 3000
 // Check if .next directory exists, if not, run build
 const nextDir = path.join(__dirname, '.next')
 if (!fs.existsSync(nextDir)) {
-  console.log('Build directory not found. Running build...')
+  console.log('Build directory not found. Installing dependencies and running build...')
   
-  const buildProcess = spawn('npm', ['run', 'build'], {
+  // First install dependencies
+  const installProcess = spawn('npm', ['install'], {
     stdio: 'inherit',
     shell: true
   })
   
-  buildProcess.on('close', (code) => {
+  installProcess.on('close', (code) => {
     if (code !== 0) {
-      console.error('Build failed with code:', code)
+      console.error('Install failed with code:', code)
       process.exit(1)
     }
-    console.log('Build completed successfully')
-    startServer()
+    console.log('Dependencies installed successfully')
+    
+    // Then run build
+    const buildProcess = spawn('npm', ['run', 'build'], {
+      stdio: 'inherit',
+      shell: true
+    })
+    
+    buildProcess.on('close', (code) => {
+      if (code !== 0) {
+        console.error('Build failed with code:', code)
+        process.exit(1)
+      }
+      console.log('Build completed successfully')
+      startServer()
+    })
   })
 } else {
   startServer()

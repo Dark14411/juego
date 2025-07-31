@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "node server.js",
-    "start:render": "node server.js",
+    "start": "node app.js",
+    "start:render": "node app.js",
     "lint": "next lint",
     "export": "next export"
   },
