@@ -1,16 +1,14 @@
 {
-  "name": "gaming-hub-ultimate",
-  "version": "2.0.0",
+  "name": "superhero-game",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:render": "next build",
-    "start": "next start -p 3000",
-    "start:render": "next start -p 3000",
+    "start": "next start -p $PORT",
+    "start:render": "node start.js",
     "lint": "next lint",
-    "export": "next export",
-    "render-start": "next start -p 3000"
+    "export": "next export"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
