@@ -5,11 +5,7 @@ const nextConfig = {
     unoptimized: true
   },
   output: 'standalone',
-  trailingSlash: true,
-  env: {
-    NODE_ENV: process.env.NODE_ENV || 'development',
-    NEXT_TELEMETRY_DISABLED: '1'
-  }
+  trailingSlash: true
 }
 
 export default nextConfig
