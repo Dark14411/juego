@@ -1,0 +1,192 @@
+{
+  "game": {
+    "title": "My Virtual Pou",
+    "welcome": "Welcome to your virtual pet!",
+    "touchMe": "Touch me!",
+    "coins": "Coins",
+    "health": "Health",
+    "happiness": "Happiness",
+    "energy": "Energy",
+    "hunger": "Hunger",
+    "cleanliness": "Cleanliness"
+  },
+  "menu": {
+    "home": "Home",
+    "store": "Store",
+    "minigames": "Mini-Games",
+    "care": "Care for Pou",
+    "customization": "Customize",
+    "achievements": "Achievements",
+    "analytics": "Analytics",
+    "settings": "Settings",
+    "stats": "Statistics"
+  },
+  "actions": {
+    "feed": "Feed",
+    "play": "Play",
+    "clean": "Clean",
+    "sleep": "Sleep",
+    "games": "Games",
+    "care": "Care"
+  },
+  "store": {
+    "title": "🛒 Pou Store",
+    "subtitle": "Buy items for your virtual pet",
+    "categories": {
+      "cosmetic": "Cosmetics",
+      "food": "Food",
+      "care": "Care"
+    },
+    "buy": "Buy",
+    "purchased": "Purchased",
+    "insufficientFunds": "Insufficient funds",
+    "purchaseSuccess": "Purchase successful!",
+    "itemAdded": "Item added to your inventory"
+  },
+  "minigames": {
+    "title": "🎮 Mini-Games",
+    "subtitle": "Play and earn coins!",
+    "memory": "Memory",
+    "jumping": "Jumping",
+    "speed": "Speed",
+    "start": "Start",
+    "pause": "Pause",
+    "resume": "Resume",
+    "gameOver": "Game Over!",
+    "score": "Score",
+    "time": "Time",
+    "moves": "Moves",
+    "pairs": "Pairs",
+    "hits": "Hits",
+    "accuracy": "Accuracy",
+    "coinsEarned": "Coins earned",
+    "playAgain": "Play again",
+    "backToMenu": "Back to menu"
+  },
+  "customization": {
+    "title": "🎨 Customization",
+    "subtitle": "Customize your Pou",
+    "categories": {
+      "colors": "Colors",
+      "patterns": "Patterns",
+      "eyes": "Eyes",
+      "backgrounds": "Backgrounds"
+    },
+    "save": "Save",
+    "reset": "Reset",
+    "preview": "Preview",
+    "owned": "Owned",
+    "buy": "Buy"
+  },
+  "achievements": {
+    "title": "🏆 Achievements",
+    "subtitle": "Complete challenges and earn rewards",
+    "categories": {
+      "all": "All",
+      "care": "Care",
+      "games": "Games",
+      "shopping": "Shopping",
+      "customization": "Customization",
+      "special": "Special"
+    },
+    "claim": "Claim",
+    "claimed": "Claimed",
+    "progress": "Progress",
+    "reward": "Reward",
+    "unlocked": "Achievement unlocked!"
+  },
+  "settings": {
+    "title": "⚙️ Settings",
+    "language": "Language",
+    "username": "Username",
+    "audio": "Audio",
+    "music": "Music",
+    "soundEffects": "Sound Effects",
+    "testMusic": "Test Music",
+    "testSound": "Test Sound",
+    "musicStatus": "Music Status",
+    "soundStatus": "Sound Status",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "save": "Save",
+    "reset": "Reset",
+    "about": "About"
+  },
+  "languages": {
+    "es": "Español",
+    "en": "English"
+  },
+  "stats": {
+    "title": "📊 Statistics",
+    "timePlayed": "Time played",
+    "actionsPerformed": "Actions performed",
+    "achievementsUnlocked": "Achievements unlocked",
+    "coinsSpent": "Coins spent",
+    "itemsPurchased": "Items purchased",
+    "gamesPlayed": "Games played"
+  },
+  "notifications": {
+    "pouHappy": "Pou is very happy!",
+    "pouHungry": "Pou is hungry",
+    "pouTired": "Pou is tired",
+    "pouDirty": "Pou needs a bath",
+    "achievementUnlocked": "New achievement unlocked!",
+    "itemPurchased": "Item purchased successfully"
+  },
+  "analytics": {
+    "title": "📊 Analytics",
+    "subtitle": "Game metrics and statistics",
+    "overview": "Overview",
+    "details": "Details",
+    "activity": "Activity",
+    "export": "Export",
+    "reset": "Reset",
+    "totalTime": "Total Time",
+    "coinsEarned": "Coins Earned",
+    "gamesPlayed": "Games Played",
+    "achievements": "Achievements",
+    "sessionStats": "Session Stats",
+    "sessionDuration": "Session Duration",
+    "actionsPerMinute": "Actions per Minute",
+    "coinsPerHour": "Coins per Hour",
+    "totalSessions": "Total Sessions",
+    "activitySummary": "Activity Summary",
+    "pouInteractions": "Pou Interactions",
+    "storeVisits": "Store Visits",
+    "itemsPurchased": "Items Purchased",
+    "customizationChanges": "Customization Changes",
+    "recentActivity": "Recent Activity",
+    "noActivity": "No recent activity",
+    "economy": "Economy",
+    "coinsSpent": "Coins Spent",
+    "netCoins": "Net Coins",
+    "gaming": "Gaming",
+    "pouClick": "Pou Click",
+    "purchase": "Purchase",
+    "coinEarned": "Coin Earned",
+    "gamePlayed": "Game Played",
+    "achievementUnlocked": "Achievement Unlocked",
+    "customizationChange": "Customization Change",
+    "storeVisit": "Store Visit"
+  },
+  "pwa": {
+    "installTitle": "Install My Virtual Pou",
+    "installDescription": "Install the app for faster access and offline play",
+    "install": "Install",
+    "new": "New",
+    "online": "Online",
+    "offline": "Offline",
+    "offlineSupport": "Offline support",
+    "benefits": "Benefits:",
+    "appLike": "Like a native app",
+    "offlinePlay": "Play without internet",
+    "dismiss": "Not now",
+    "later": "Later"
+  },
+  "errors": {
+    "general": "Something went wrong",
+    "network": "Connection error",
+    "save": "Save error",
+    "load": "Load error"
+  }
+} 

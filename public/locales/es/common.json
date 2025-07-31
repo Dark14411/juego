@@ -1,0 +1,192 @@
+{
+  "game": {
+    "title": "Mi Pou Virtual",
+    "welcome": "¡Bienvenido a tu mascota virtual!",
+    "touchMe": "¡Tócame!",
+    "coins": "Monedas",
+    "health": "Salud",
+    "happiness": "Felicidad",
+    "energy": "Energía",
+    "hunger": "Hambre",
+    "cleanliness": "Limpieza"
+  },
+  "menu": {
+    "home": "Inicio",
+    "store": "Tienda",
+    "minigames": "Mini-Juegos",
+    "care": "Cuidar Pou",
+    "customization": "Personalizar",
+    "achievements": "Logros",
+    "analytics": "Analytics",
+    "settings": "Configuración",
+    "stats": "Estadísticas"
+  },
+  "actions": {
+    "feed": "Alimentar",
+    "play": "Jugar",
+    "clean": "Limpiar",
+    "sleep": "Dormir",
+    "games": "Juegos",
+    "care": "Cuidar"
+  },
+  "store": {
+    "title": "🛒 Tienda de Pou",
+    "subtitle": "Compra items para tu mascota virtual",
+    "categories": {
+      "cosmetic": "Cosméticos",
+      "food": "Alimentos",
+      "care": "Cuidado"
+    },
+    "buy": "Comprar",
+    "purchased": "Comprado",
+    "insufficientFunds": "Sin fondos",
+    "purchaseSuccess": "¡Compra exitosa!",
+    "itemAdded": "Item agregado a tu inventario"
+  },
+  "minigames": {
+    "title": "🎮 Mini-Juegos",
+    "subtitle": "¡Juega y gana monedas!",
+    "memory": "Memoria",
+    "jumping": "Saltos",
+    "speed": "Velocidad",
+    "start": "Comenzar",
+    "pause": "Pausar",
+    "resume": "Continuar",
+    "gameOver": "¡Juego Terminado!",
+    "score": "Puntuación",
+    "time": "Tiempo",
+    "moves": "Movimientos",
+    "pairs": "Pares",
+    "hits": "Aciertos",
+    "accuracy": "Precisión",
+    "coinsEarned": "Monedas ganadas",
+    "playAgain": "Jugar de nuevo",
+    "backToMenu": "Volver al menú"
+  },
+  "customization": {
+    "title": "🎨 Personalización",
+    "subtitle": "Personaliza tu Pou",
+    "categories": {
+      "colors": "Colores",
+      "patterns": "Patrones",
+      "eyes": "Ojos",
+      "backgrounds": "Fondos"
+    },
+    "save": "Guardar",
+    "reset": "Restablecer",
+    "preview": "Vista previa",
+    "owned": "Propio",
+    "buy": "Comprar"
+  },
+  "achievements": {
+    "title": "🏆 Logros",
+    "subtitle": "Completa desafíos y gana recompensas",
+    "categories": {
+      "all": "Todos",
+      "care": "Cuidado",
+      "games": "Juegos",
+      "shopping": "Compras",
+      "customization": "Personalización",
+      "special": "Especiales"
+    },
+    "claim": "Reclamar",
+    "claimed": "Reclamado",
+    "progress": "Progreso",
+    "reward": "Recompensa",
+    "unlocked": "¡Logro desbloqueado!"
+  },
+  "settings": {
+    "title": "⚙️ Configuración",
+    "language": "Idioma",
+    "username": "Nombre de usuario",
+    "audio": "Audio",
+    "music": "Música",
+    "soundEffects": "Efectos de Sonido",
+    "testMusic": "Probar Música",
+    "testSound": "Probar Sonido",
+    "musicStatus": "Estado de Música",
+    "soundStatus": "Estado de Sonido",
+    "enabled": "Activado",
+    "disabled": "Desactivado",
+    "save": "Guardar",
+    "reset": "Restablecer",
+    "about": "Acerca de"
+  },
+  "languages": {
+    "es": "Español",
+    "en": "English"
+  },
+  "stats": {
+    "title": "📊 Estadísticas",
+    "timePlayed": "Tiempo jugado",
+    "actionsPerformed": "Acciones realizadas",
+    "achievementsUnlocked": "Logros desbloqueados",
+    "coinsSpent": "Monedas gastadas",
+    "itemsPurchased": "Items comprados",
+    "gamesPlayed": "Juegos jugados"
+  },
+  "notifications": {
+    "pouHappy": "¡Pou está muy feliz!",
+    "pouHungry": "Pou tiene hambre",
+    "pouTired": "Pou está cansado",
+    "pouDirty": "Pou necesita un baño",
+    "achievementUnlocked": "¡Nuevo logro desbloqueado!",
+    "itemPurchased": "Item comprado exitosamente"
+  },
+  "analytics": {
+    "title": "📊 Analytics",
+    "subtitle": "Métricas y estadísticas de tu juego",
+    "overview": "Resumen",
+    "details": "Detalles",
+    "activity": "Actividad",
+    "export": "Exportar",
+    "reset": "Reiniciar",
+    "totalTime": "Tiempo Total",
+    "coinsEarned": "Monedas Ganadas",
+    "gamesPlayed": "Juegos Jugados",
+    "achievements": "Logros",
+    "sessionStats": "Estadísticas de Sesión",
+    "sessionDuration": "Duración de Sesión",
+    "actionsPerMinute": "Acciones por Minuto",
+    "coinsPerHour": "Monedas por Hora",
+    "totalSessions": "Sesiones Totales",
+    "activitySummary": "Resumen de Actividad",
+    "pouInteractions": "Interacciones con Pou",
+    "storeVisits": "Visitas a la Tienda",
+    "itemsPurchased": "Items Comprados",
+    "customizationChanges": "Cambios de Personalización",
+    "recentActivity": "Actividad Reciente",
+    "noActivity": "No hay actividad reciente",
+    "economy": "Economía",
+    "coinsSpent": "Monedas Gastadas",
+    "netCoins": "Monedas Netas",
+    "gaming": "Gaming",
+    "pouClick": "Clic en Pou",
+    "purchase": "Compra",
+    "coinEarned": "Moneda Ganada",
+    "gamePlayed": "Juego Jugado",
+    "achievementUnlocked": "Logro Desbloqueado",
+    "customizationChange": "Cambio de Personalización",
+    "storeVisit": "Visita a Tienda"
+  },
+  "pwa": {
+    "installTitle": "Instalar Mi Pou Virtual",
+    "installDescription": "Instala la app para acceder más rápido y jugar sin conexión",
+    "install": "Instalar",
+    "new": "Nuevo",
+    "online": "En línea",
+    "offline": "Sin conexión",
+    "offlineSupport": "Soporte offline",
+    "benefits": "Beneficios:",
+    "appLike": "Como una app nativa",
+    "offlinePlay": "Jugar sin internet",
+    "dismiss": "Ahora no",
+    "later": "Más tarde"
+  },
+  "errors": {
+    "general": "Algo salió mal",
+    "network": "Error de conexión",
+    "save": "Error al guardar",
+    "load": "Error al cargar"
+  }
+} 

@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: gaming-hub-ultimate
+    env: node
+    buildCommand: npm ci --only=production --no-optional && npm run build:render
+    startCommand: npm run start:render
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: NODE_OPTIONS
+        value: "--max-old-space-size=384"
+      - key: NEXT_TELEMETRY_DISABLED
+        value: "1"
+      - key: NPM_CONFIG_PRODUCTION
+        value: "true"
+    healthCheckPath: /
+    autoDeploy: true
+    plan: free 

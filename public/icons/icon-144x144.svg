@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144 144" width="144" height="144">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#EC4899;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Fondo circular -->
+  <circle cx="72" cy="72" r="68" fill="url(#grad1)" stroke="#ffffff" stroke-width="4"/>
+  
+  <!-- Controlador de juego -->
+  <g transform="translate(72,72)">
+    <!-- Cuerpo del controlador -->
+    <rect x="-32" y="-12" width="64" height="24" rx="12" ry="12" fill="url(#grad2)"/>
+    
+    <!-- Botones izquierdos (D-pad) -->
+    <rect x="-26" y="-6" width="12" height="4" rx="2" fill="#ffffff" opacity="0.9"/>
+    <rect x="-22" y="-10" width="4" height="12" rx="2" fill="#ffffff" opacity="0.9"/>
+    
+    <!-- Botones derechos -->
+    <circle cx="20" cy="-6" r="3" fill="#ffffff" opacity="0.9"/>
+    <circle cx="26" cy="0" r="3" fill="#ffffff" opacity="0.9"/>
+    <circle cx="20" cy="6" r="3" fill="#ffffff" opacity="0.9"/>
+    <circle cx="14" cy="0" r="3" fill="#ffffff" opacity="0.9"/>
+    
+    <!-- Joysticks -->
+    <circle cx="-8" cy="4" r="4" fill="#ffffff" opacity="0.8"/>
+    <circle cx="8" cy="4" r="4" fill="#ffffff" opacity="0.8"/>
+    
+    <!-- Pequeños detalles -->
+    <rect x="-4" y="-8" width="8" height="2" rx="1" fill="#ffffff" opacity="0.6"/>
+  </g>
+  
+  <!-- Destellos -->
+  <circle cx="45" cy="45" r="2" fill="#ffffff" opacity="0.7"/>
+  <circle cx="105" cy="35" r="1.5" fill="#ffffff" opacity="0.5"/>
+  <circle cx="25" cy="105" r="1" fill="#ffffff" opacity="0.6"/>
+</svg> 
