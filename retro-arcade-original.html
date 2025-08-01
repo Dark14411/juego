@@ -1,0 +1,2340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 Retro Arcade & Tamagotchi Pro</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Press Start 2P', monospace;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
+            color: #00ff41;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        /* 🎮 SIDEBAR LATERAL */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.9);
+            border-right: 3px solid #00ff41;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #00ff41;
+        }
+        
+        .sidebar-header h2 {
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #00ff41;
+        }
+        
+        /* 🐾 POU EMOJI ANIMADO */
+        .pou-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .pou-emoji {
+            font-size: 80px;
+            animation: pouBounce 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px #00ff41);
+        }
+        
+        @keyframes pouBounce {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* 📊 STATS ANIMADOS */
+        .stats-container {
+            padding: 20px;
+        }
+        
+        .stat-item {
+            margin-bottom: 15px;
+            background: rgba(0, 255, 65, 0.1);
+            border: 1px solid #00ff41;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        
+        .stat-label {
+            font-size: 10px;
+            margin-bottom: 5px;
+            color: #00ff41;
+        }
+        
+        .stat-bar {
+            width: 100%;
+            height: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .stat-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff41, #00cc33);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+        
+        .stat-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        /* 🎮 ACCIONES */
+        .actions-container {
+            padding: 20px;
+        }
+        
+        .action-btn {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #00ff41, #00cc33);
+            border: none;
+            border-radius: 5px;
+            color: #000;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: none;
+        }
+        
+        .action-btn:hover {
+            background: linear-gradient(45deg, #00cc33, #00ff41);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 65, 0.4);
+        }
+        
+        /* 🎯 CONTENIDO PRINCIPAL */
+        .main-content {
+            margin-left: 280px;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px #00ff41;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 20px #00ff41; }
+            to { text-shadow: 0 0 30px #00ff41, 0 0 40px #00ff41; }
+        }
+        
+        /* 🕹️ JUEGOS GRID */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .game-card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff41;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .game-card:hover::before {
+            left: 100%;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 65, 0.3);
+        }
+        
+        .game-card h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #00ff41;
+        }
+        
+        .game-card p {
+            font-size: 10px;
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+        
+        /* 🛒 TIENDA */
+        .store-section {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff41;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .store-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .store-item {
+            background: rgba(0, 255, 65, 0.1);
+            border: 1px solid #00ff41;
+            border-radius: 5px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .store-item h4 {
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+        
+        .store-item p {
+            font-size: 10px;
+            color: #ccc;
+            margin-bottom: 10px;
+        }
+        
+        .buy-btn {
+            background: #00ff41;
+            color: #000;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 3px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 8px;
+            cursor: pointer;
+        }
+        
+        /* 🔐 AUTENTICACIÓN */
+        .auth-section {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #00ff41;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 10px;
+            margin-bottom: 5px;
+            color: #00ff41;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #00ff41;
+            border-radius: 5px;
+            background: rgba(0, 0, 0, 0.5);
+            color: #00ff41;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 10px;
+        }
+        
+        .auth-btn {
+            background: #00ff41;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 10px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        /* 📊 LOGROS Y PUNTUACIONES */
+        .achievements-section {
+            padding: 20px;
+            border-top: 2px solid #00ff41;
+        }
+        
+        .achievement-item {
+            background: rgba(0, 255, 65, 0.1);
+            border: 1px solid #00ff41;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 10px;
+        }
+        
+        /* 🎮 CANVAS DE JUEGO */
+        .game-canvas {
+            border: 2px solid #00ff41;
+            background: #000;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        .game-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .game-controls {
+            margin: 10px 0;
+            font-size: 10px;
+            color: #ccc;
+        }
+        
+        /* 📱 RESPONSIVE */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* ✨ EFECTOS ESPECIALES */
+        .neon-text {
+            text-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41, 0 0 30px #00ff41;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .message {
+            background: rgba(0, 255, 65, 0.2);
+            border: 1px solid #00ff41;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+            text-align: center;
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 🎮 SIDEBAR LATERAL -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2 class="neon-text">🎮 RETRO ARCADE</h2>
+            <p style="font-size: 8px; color: #ccc;">Tamagotchi Pro Edition</p>
+        </div>
+        
+        <!-- 🐾 POU EMOJI ANIMADO -->
+        <div class="pou-container">
+            <div class="pou-emoji" id="pou-emoji">🐾</div>
+            <p style="font-size: 10px; margin-top: 10px;">Tu POU Virtual</p>
+        </div>
+        
+        <!-- 📊 STATS ANIMADOS -->
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-label">🍽️ Hambre</div>
+                <div class="stat-bar">
+                    <div class="stat-fill" id="hunger-bar" style="width: 85%"></div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-label">😊 Felicidad</div>
+                <div class="stat-bar">
+                    <div class="stat-fill" id="happiness-bar" style="width: 92%"></div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-label">⚡ Energía</div>
+                <div class="stat-bar">
+                    <div class="stat-fill" id="energy-bar" style="width: 78%"></div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-label">💰 Monedas</div>
+                <div style="font-size: 12px; color: #00ff41;" id="coins-display">1000</div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-label">⭐ Nivel</div>
+                <div style="font-size: 12px; color: #00ff41;" id="level-display">1</div>
+            </div>
+        </div>
+        
+        <!-- 🎮 ACCIONES -->
+        <div class="actions-container">
+            <button class="action-btn" onclick="tamagotchiAction('feed')">🍽️ Alimentar</button>
+            <button class="action-btn" onclick="tamagotchiAction('play')">🎾 Jugar</button>
+            <button class="action-btn" onclick="tamagotchiAction('clean')">🛁 Limpiar</button>
+            <button class="action-btn" onclick="tamagotchiAction('sleep')">😴 Dormir</button>
+        </div>
+        
+        <!-- 📊 LOGROS -->
+        <div class="achievements-section">
+            <h3 style="font-size: 10px; margin-bottom: 10px;">🏆 Logros Recientes</h3>
+            <div class="achievement-item">⭐ Primer juego completado</div>
+            <div class="achievement-item">💰 100 monedas ganadas</div>
+            <div class="achievement-item">🎮 5 juegos jugados</div>
+        </div>
+    </div>
+    
+    <!-- 🎯 CONTENIDO PRINCIPAL -->
+    <div class="main-content">
+        <div class="header">
+            <h1 class="neon-text pulse">🎮 RETRO ARCADE & TAMAGOTCHI PRO</h1>
+            <p style="font-size: 12px; color: #ccc;">¡Sistema completo con APIs reales y MongoDB!</p>
+        </div>
+        
+        <!-- 🔐 SECCIÓN DE AUTENTICACIÓN -->
+        <div id="auth-section" class="auth-section">
+            <h2 style="font-size: 14px; margin-bottom: 15px;">🔐 Autenticación</h2>
+            
+            <div id="login-form">
+                <h3 style="font-size: 12px; margin-bottom: 15px;">Iniciar Sesión</h3>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="login-email" placeholder="tu@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Contraseña:</label>
+                    <input type="password" id="login-password" placeholder="Contraseña">
+                </div>
+                <button class="auth-btn" onclick="login()">🔐 Iniciar Sesión</button>
+                <button class="auth-btn" onclick="showRegister()">📝 Registrarse</button>
+            </div>
+            
+            <div id="register-form" class="hidden">
+                <h3 style="font-size: 12px; margin-bottom: 15px;">Registrarse</h3>
+                <div class="form-group">
+                    <label>Usuario:</label>
+                    <input type="text" id="register-username" placeholder="Usuario">
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="register-email" placeholder="tu@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Contraseña:</label>
+                    <input type="password" id="register-password" placeholder="Contraseña">
+                </div>
+                <button class="auth-btn" onclick="register()">📝 Registrarse</button>
+                <button class="auth-btn" onclick="showLogin()">🔐 Iniciar Sesión</button>
+            </div>
+        </div>
+        
+        <!-- 🎮 SECCIÓN PRINCIPAL -->
+        <div id="main-section" class="hidden">
+            <!-- 🕹️ JUEGOS -->
+            <div class="games-grid">
+                <div class="game-card" onclick="startGame('pong')">
+                    <h3>🏓 PONG</h3>
+                    <p>Clásico juego de paletas con IA rival</p>
+                    <p style="font-size: 8px; color: #00ff41;">Controles: W/S o ↑/↓</p>
+                </div>
+                
+                <div class="game-card" onclick="startGame('tetris')">
+                    <h3>🧩 TETRIS</h3>
+                    <p>Piezas que caen, líneas que desaparecen</p>
+                    <p style="font-size: 8px; color: #00ff41;">Controles: ←/→/↓/↑</p>
+                </div>
+                
+                <div class="game-card" onclick="startGame('memory')">
+                    <h3>🧠 MEMORY</h3>
+                    <p>Encuentra las parejas de cartas</p>
+                    <p style="font-size: 8px; color: #00ff41;">Controles: Click</p>
+                </div>
+                
+                <div class="game-card" onclick="startGame('simon')">
+                    <h3>🎵 SIMON</h3>
+                    <p>Repite la secuencia de colores</p>
+                    <p style="font-size: 8px; color: #00ff41;">Controles: Click</p>
+                </div>
+                
+                <div class="game-card" onclick="startGame('breakout')">
+                    <h3>🏀 BREAKOUT</h3>
+                    <p>Rompe todos los bloques</p>
+                    <p style="font-size: 8px; color: #00ff41;">Controles: ←/→</p>
+                </div>
+                
+                <div class="game-card" onclick="startGame('2048')">
+                    <h3>🔢 2048</h3>
+                    <p>Combina números hasta llegar a 2048</p>
+                    <p style="font-size: 8px; color: #00ff41;">Controles: ←/→/↑/↓</p>
+                </div>
+            </div>
+            
+            <!-- 🛒 TIENDA -->
+            <div class="store-section">
+                <h2 style="font-size: 14px; margin-bottom: 15px;">🛒 Tienda</h2>
+                <div class="store-grid">
+                    <div class="store-item">
+                        <h4>🎨 Color Azul</h4>
+                        <p>100 monedas</p>
+                        <button class="buy-btn" onclick="buyItem('color_blue')">Comprar</button>
+                    </div>
+                    <div class="store-item">
+                        <h4>🎨 Color Rojo</h4>
+                        <p>150 monedas</p>
+                        <button class="buy-btn" onclick="buyItem('color_red')">Comprar</button>
+                    </div>
+                    <div class="store-item">
+                        <h4>🌌 Fondo Espacial</h4>
+                        <p>300 monedas</p>
+                        <button class="buy-btn" onclick="buyItem('background_space')">Comprar</button>
+                    </div>
+                    <div class="store-item">
+                        <h4>👑 Corona Real</h4>
+                        <p>500 monedas</p>
+                        <button class="buy-btn" onclick="buyItem('crown')">Comprar</button>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="auth-btn" onclick="logout()">🚪 Cerrar Sesión</button>
+        </div>
+        
+        <!-- 🎮 CANVAS DE JUEGO -->
+        <div id="game-container" class="game-container hidden">
+            <canvas id="game-canvas" class="game-canvas" width="800" height="600"></canvas>
+            <div class="game-controls">
+                <p id="game-instructions">Instrucciones del juego</p>
+                <p id="game-score">Score: 0</p>
+                <button class="auth-btn" onclick="simulateGameComplete()">🎮 Completar Juego</button>
+                <button class="auth-btn" onclick="closeGame()">🔙 Volver al Menú</button>
+            </div>
+        </div>
+        
+        <div id="message" class="message hidden"></div>
+    </div>
+    
+    <script>
+        let currentUser = null;
+        let authToken = null;
+        let currentGame = null;
+        let gameCanvas = null;
+        let gameCtx = null;
+        
+        // 🔐 FUNCIONES DE AUTENTICACIÓN
+        function showRegister() {
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('register-form').classList.remove('hidden');
+        }
+        
+        function showLogin() {
+            document.getElementById('register-form').classList.add('hidden');
+            document.getElementById('login-form').classList.remove('hidden');
+        }
+        
+        async function register() {
+            const username = document.getElementById('register-username').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            
+            if (!username || !email || !password) {
+                showMessage('❌ Todos los campos son requeridos', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    currentUser = data.user;
+                    authToken = data.token;
+                    showMessage('✅ ¡Registro exitoso!', 'success');
+                    showMainSection();
+                    startStatsTimer();
+                    loadStatsFromStorage();
+                    saveSession();
+                } else {
+                    showMessage('❌ ' + data.error, 'error');
+                }
+            } catch (error) {
+                showMessage('❌ Error de conexión', 'error');
+            }
+        }
+        
+        async function login() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            if (!email || !password) {
+                showMessage('❌ Email y contraseña son requeridos', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    currentUser = data.user;
+                    authToken = data.token;
+                    showMessage('✅ ¡Login exitoso!', 'success');
+                    showMainSection();
+                    startStatsTimer();
+                    loadStatsFromStorage();
+                    saveSession();
+                } else {
+                    showMessage('❌ ' + data.error, 'error');
+                }
+            } catch (error) {
+                showMessage('❌ Error de conexión', 'error');
+            }
+        }
+        
+        function logout() {
+            currentUser = null;
+            authToken = null;
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('tamagotchiStats');
+            
+            if (statsTimer) {
+                clearInterval(statsTimer);
+                statsTimer = null;
+            }
+            
+            showMessage('🚪 Sesión cerrada', 'info');
+            showAuthSection();
+        }
+        
+        // 🐾 FUNCIONES TAMAGOTCHI
+        async function tamagotchiAction(action) {
+            if (!authToken) {
+                showMessage('❌ Debes iniciar sesión', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/tamagotchi/action', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + authToken
+                    },
+                    body: JSON.stringify({ action })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    currentUser = { ...currentUser, ...data.user };
+                    updateDisplay();
+                    showMessage(data.message, 'success');
+                    
+                    // Animación del POU
+                    const pouEmoji = document.getElementById('pou-emoji');
+                    pouEmoji.style.transform = 'scale(1.2)';
+                    pouEmoji.style.filter = 'brightness(1.5) drop-shadow(0 0 20px #00ff41)';
+                    setTimeout(() => {
+                        pouEmoji.style.transform = 'scale(1)';
+                        pouEmoji.style.filter = 'drop-shadow(0 0 20px #00ff41)';
+                    }, 300);
+                    
+                    // Efecto de partículas en el botón
+                    const actionBtn = event.target;
+                    actionBtn.style.background = 'linear-gradient(45deg, #00ff41, #ffff00)';
+                    actionBtn.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        actionBtn.style.background = 'linear-gradient(45deg, #00ff41, #00cc33)';
+                        actionBtn.style.transform = 'scale(1)';
+                    }, 200);
+                    
+                } else {
+                    showMessage('❌ ' + data.error, 'error');
+                }
+            } catch (error) {
+                showMessage('❌ Error de conexión', 'error');
+            }
+        }
+        
+        // 🎮 FUNCIONES DE JUEGOS
+        function startGame(gameType) {
+            if (!authToken) {
+                showMessage('❌ Debes iniciar sesión', 'error');
+                return;
+            }
+            
+            currentGame = gameType;
+            document.getElementById('main-section').classList.add('hidden');
+            document.getElementById('game-container').classList.remove('hidden');
+            
+            gameCanvas = document.getElementById('game-canvas');
+            gameCtx = gameCanvas.getContext('2d');
+            
+            // Configurar instrucciones según el juego
+            const instructions = {
+                'pong': 'Usa W/S o ↑/↓ para mover la paleta. ¡Gana contra la IA!',
+                'tetris': 'Usa ←/→ para mover, ↓ para bajar rápido, ↑ para rotar',
+                'memory': 'Haz click en las cartas para encontrar parejas',
+                'simon': 'Repite la secuencia de colores',
+                'breakout': 'Usa ←/→ para mover la paleta y romper bloques',
+                '2048': 'Usa ←/→/↑/↓ para combinar números hasta 2048'
+            };
+            
+            document.getElementById('game-instructions').textContent = instructions[gameType];
+            
+            // Iniciar juego específico
+            switch(gameType) {
+                case 'pong':
+                    startPongGame();
+                    break;
+                case 'tetris':
+                    startTetrisGame();
+                    break;
+                case 'memory':
+                    startMemoryGame();
+                    break;
+                case 'simon':
+                    startSimonGame();
+                    break;
+                case 'breakout':
+                    startBreakoutGame();
+                    break;
+                case '2048':
+                    start2048Game();
+                    break;
+            }
+        }
+        
+        function closeGame() {
+            document.getElementById('game-container').classList.add('hidden');
+            document.getElementById('main-section').classList.remove('hidden');
+            
+            // Limpiar estado del juego actual
+            if (currentGame && gameState[currentGame]) {
+                gameState[currentGame].stop();
+            }
+            
+            currentGame = null;
+            
+            // Limpiar event listeners
+            document.removeEventListener('keydown', handleGameKeydown);
+            document.removeEventListener('keyup', handleGameKeyup);
+        }
+        
+        // 🛒 FUNCIONES DE TIENDA
+        async function buyItem(itemId) {
+            if (!authToken) {
+                showMessage('❌ Debes iniciar sesión', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/store/buy', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + authToken
+                    },
+                    body: JSON.stringify({ itemId })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    currentUser = { ...currentUser, ...data.user };
+                    updateDisplay();
+                    showMessage(data.message, 'success');
+                    
+                    // Aplicar efecto visual
+                    applyItemEffect(itemId);
+                    
+                    // Efecto de compra exitosa
+                    const buyBtn = event.target;
+                    buyBtn.style.background = 'linear-gradient(45deg, #00ff41, #ffff00)';
+                    buyBtn.textContent = '¡Comprado!';
+                    buyBtn.disabled = true;
+                    setTimeout(() => {
+                        buyBtn.style.background = '#00ff41';
+                        buyBtn.textContent = 'Comprado';
+                    }, 1000);
+                    
+                } else {
+                    showMessage('❌ ' + data.error, 'error');
+                }
+            } catch (error) {
+                showMessage('❌ Error de conexión', 'error');
+            }
+        }
+        
+        function applyItemEffect(itemId) {
+            const pouEmoji = document.getElementById('pou-emoji');
+            
+            switch(itemId) {
+                case 'color_blue':
+                    pouEmoji.style.filter = 'hue-rotate(240deg) drop-shadow(0 0 20px #00ff41)';
+                    pouEmoji.textContent = '🐾';
+                    break;
+                case 'color_red':
+                    pouEmoji.style.filter = 'hue-rotate(0deg) drop-shadow(0 0 20px #ff0000)';
+                    pouEmoji.textContent = '🐾';
+                    break;
+                case 'crown':
+                    pouEmoji.textContent = '👑';
+                    pouEmoji.style.filter = 'drop-shadow(0 0 20px #ffff00)';
+                    break;
+                case 'background_space':
+                    document.body.style.background = 'linear-gradient(135deg, #000428 0%, #004e92 50%, #667eea 100%)';
+                    break;
+                case 'color_green':
+                    pouEmoji.style.filter = 'hue-rotate(120deg) drop-shadow(0 0 20px #00ff41)';
+                    pouEmoji.textContent = '🐾';
+                    break;
+                case 'background_forest':
+                    document.body.style.background = 'linear-gradient(135deg, #0f4c3a 0%, #2d5a3d 50%, #4a7c59 100%)';
+                    break;
+                case 'xp_boost':
+                    // Efecto de boost XP
+                    pouEmoji.style.animation = 'pulse 0.5s infinite';
+                    setTimeout(() => {
+                        pouEmoji.style.animation = 'pouBounce 2s ease-in-out infinite';
+                    }, 2000);
+                    break;
+            }
+            
+            // Efecto de aplicación
+            pouEmoji.style.transform = 'scale(1.3) rotate(10deg)';
+            setTimeout(() => {
+                pouEmoji.style.transform = 'scale(1) rotate(0deg)';
+            }, 500);
+        }
+        
+        // 📊 FUNCIONES DE UI
+        function showMainSection() {
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('main-section').classList.remove('hidden');
+            updateDisplay();
+        }
+        
+        function showAuthSection() {
+            document.getElementById('main-section').classList.add('hidden');
+            document.getElementById('auth-section').classList.remove('hidden');
+        }
+        
+        function updateDisplay() {
+            if (!currentUser) return;
+            
+            document.getElementById('coins-display').textContent = currentUser.coins;
+            document.getElementById('level-display').textContent = currentUser.level;
+            
+            document.getElementById('hunger-bar').style.width = currentUser.stats.hunger + '%';
+            document.getElementById('happiness-bar').style.width = currentUser.stats.happiness + '%';
+            document.getElementById('energy-bar').style.width = currentUser.stats.energy + '%';
+            
+            // Actualizar colores según nivel de stats
+            updateStatColors();
+        }
+        
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = message;
+            messageDiv.className = 'message ' + type;
+            messageDiv.classList.remove('hidden');
+            
+            setTimeout(() => {
+                messageDiv.classList.add('hidden');
+            }, 3000);
+        }
+        
+        // 🎮 JUEGOS IMPLEMENTADOS
+        let gameState = {
+            pong: null,
+            tetris: null,
+            memory: null,
+            simon: null,
+            breakout: null,
+            '2048': null
+        };
+        
+        function startPongGame() {
+            // Limpiar estado anterior
+            if (gameState.pong) {
+                clearInterval(gameState.pong.gameLoop);
+            }
+            
+            // Implementación del juego Pong
+            let playerY = 250;
+            let aiY = 250;
+            let ballX = 400;
+            let ballY = 300;
+            let ballSpeedX = 5;
+            let ballSpeedY = 3;
+            let playerScore = 0;
+            let aiScore = 0;
+            let gameRunning = true;
+            
+            function drawPong() {
+                // Limpiar canvas
+                gameCtx.fillStyle = '#000';
+                gameCtx.fillRect(0, 0, 800, 600);
+                
+                // Dibujar paletas
+                gameCtx.fillStyle = '#00ff41';
+                gameCtx.fillRect(50, playerY, 10, 100);
+                gameCtx.fillRect(740, aiY, 10, 100);
+                
+                // Dibujar pelota
+                gameCtx.fillStyle = '#00ff41';
+                gameCtx.fillRect(ballX, ballY, 10, 10);
+                
+                // Dibujar línea central
+                gameCtx.setLineDash([5, 15]);
+                gameCtx.strokeStyle = '#00ff41';
+                gameCtx.beginPath();
+                gameCtx.moveTo(400, 0);
+                gameCtx.lineTo(400, 600);
+                gameCtx.stroke();
+                
+                // Dibujar scores
+                gameCtx.fillStyle = '#00ff41';
+                gameCtx.font = '20px "Press Start 2P"';
+                gameCtx.fillText(playerScore, 200, 50);
+                gameCtx.fillText(aiScore, 600, 50);
+                
+                // Dibujar botón de completar
+                gameCtx.fillStyle = '#00ff41';
+                gameCtx.fillRect(350, 550, 100, 30);
+                gameCtx.fillStyle = '#000';
+                gameCtx.font = '12px "Press Start 2P"';
+                gameCtx.fillText('COMPLETAR', 360, 570);
+            }
+            
+            function updatePong() {
+                if (!gameRunning) return;
+                
+                // Mover pelota
+                ballX += ballSpeedX;
+                ballY += ballSpeedY;
+                
+                // Rebote en paredes
+                if (ballY <= 0 || ballY >= 590) {
+                    ballSpeedY = -ballSpeedY;
+                }
+                
+                // Colisión con paletas
+                if (ballX <= 60 && ballY >= playerY && ballY <= playerY + 100) {
+                    ballSpeedX = -ballSpeedX;
+                }
+                if (ballX >= 730 && ballY >= aiY && ballY <= aiY + 100) {
+                    ballSpeedX = -ballSpeedX;
+                }
+                
+                // IA simple
+                if (aiY < ballY - 50) aiY += 3;
+                if (aiY > ballY - 50) aiY -= 3;
+                
+                // Score
+                if (ballX <= 0) {
+                    aiScore++;
+                    ballX = 400;
+                    ballY = 300;
+                }
+                if (ballX >= 800) {
+                    playerScore++;
+                    ballX = 400;
+                    ballY = 300;
+                }
+                
+                // Actualizar score en UI
+                document.getElementById('game-score').textContent = `Score: ${playerScore} - ${aiScore}`;
+            }
+            
+            function gameLoop() {
+                if (!gameRunning) return;
+                drawPong();
+                updatePong();
+                gameState.pong.gameLoop = requestAnimationFrame(gameLoop);
+            }
+            
+            // Event listeners para controles
+            function handleGameKeydown(e) {
+                if (e.key === 'w' || e.key === 'W' || e.key === 'ArrowUp') {
+                    playerY = Math.max(0, playerY - 10);
+                }
+                if (e.key === 's' || e.key === 'S' || e.key === 'ArrowDown') {
+                    playerY = Math.min(500, playerY + 10);
+                }
+                if (e.key === 'Enter') {
+                    // Completar juego
+                    const finalScore = playerScore * 10;
+                    completeGame('pong', finalScore);
+                    closeGame();
+                }
+                e.preventDefault();
+            }
+            
+            // Limpiar event listeners anteriores
+            document.removeEventListener('keydown', handleGameKeydown);
+            document.addEventListener('keydown', handleGameKeydown);
+            
+            // Guardar estado del juego
+            gameState.pong = {
+                gameLoop: null,
+                handleKeydown: handleGameKeydown,
+                stop: () => {
+                    gameRunning = false;
+                    document.removeEventListener('keydown', handleGameKeydown);
+                }
+            };
+            
+            gameLoop();
+        }
+        
+        function startTetrisGame() {
+            // Limpiar estado anterior
+            if (gameState.tetris) {
+                gameState.tetris.stop();
+            }
+            
+            // Variables del juego Tetris
+            const BOARD_WIDTH = 10;
+            const BOARD_HEIGHT = 20;
+            const BLOCK_SIZE = 30;
+            const BOARD_X = 250;
+            const BOARD_Y = 50;
+            
+            let board = Array(BOARD_HEIGHT).fill().map(() => Array(BOARD_WIDTH).fill(0));
+            let currentPiece = null;
+            let currentX = 0;
+            let currentY = 0;
+            let score = 0;
+            let level = 1;
+            let gameRunning = true;
+            
+            // Piezas de Tetris
+            const PIECES = [
+                [[1, 1, 1, 1]], // I
+                [[1, 1], [1, 1]], // O
+                [[1, 1, 1], [0, 1, 0]], // T
+                [[1, 1, 1], [1, 0, 0]], // L
+                [[1, 1, 1], [0, 0, 1]], // J
+                [[1, 1, 0], [0, 1, 1]], // S
+                [[0, 1, 1], [1, 1, 0]]  // Z
+            ];
+            
+            const COLORS = ['#00ff41', '#ff0000', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ff8800'];
+            
+            function createPiece() {
+                const pieceIndex = Math.floor(Math.random() * PIECES.length);
+                return {
+                    shape: PIECES[pieceIndex],
+                    color: COLORS[pieceIndex]
+                };
+            }
+            
+            function drawBoard() {
+                // Limpiar canvas
+                gameCtx.fillStyle = '#000';
+                gameCtx.fillRect(0, 0, 800, 600);
+                
+                // Dibujar borde del tablero
+                gameCtx.strokeStyle = '#00ff41';
+                gameCtx.lineWidth = 2;
+                gameCtx.strokeRect(BOARD_X - 5, BOARD_Y - 5, BOARD_WIDTH * BLOCK_SIZE + 10, BOARD_HEIGHT * BLOCK_SIZE + 10);
+                
+                // Dibujar bloques del tablero
+                for (let y = 0; y < BOARD_HEIGHT; y++) {
+                    for (let x = 0; x < BOARD_WIDTH; x++) {
+                        if (board[y][x]) {
+                            gameCtx.fillStyle = board[y][x];
+                            gameCtx.fillRect(BOARD_X + x * BLOCK_SIZE, BOARD_Y + y * BLOCK_SIZE, BLOCK_SIZE - 1, BLOCK_SIZE - 1);
+                        }
+                    }
+                }
+                
+                // Dibujar pieza actual
+                if (currentPiece) {
+                    gameCtx.fillStyle = currentPiece.color;
+                    for (let y = 0; y < currentPiece.shape.length; y++) {
+                        for (let x = 0; x < currentPiece.shape[y].length; x++) {
+                            if (currentPiece.shape[y][x]) {
+                                gameCtx.fillRect(
+                                    BOARD_X + (currentX + x) * BLOCK_SIZE,
+                                    BOARD_Y + (currentY + y) * BLOCK_SIZE,
+                                    BLOCK_SIZE - 1,
+                                    BLOCK_SIZE - 1
+                                );
+                            }
+                        }
+                    }
+                }
+                
+                // Dibujar información
+                gameCtx.fillStyle = '#00ff41';
+                gameCtx.font = '16px "Press Start 2P"';
+                gameCtx.fillText(`Score: ${score}`, 50, 100);
+                gameCtx.fillText(`Level: ${level}`, 50, 130);
+                gameCtx.fillText('Controles:', 50, 200);
+                gameCtx.font = '12px "Press Start 2P"';
+                gameCtx.fillText('←/→: Mover', 50, 220);
+                gameCtx.fillText('↓: Bajar rápido', 50, 240);
+                gameCtx.fillText('↑: Rotar', 50, 260);
+                gameCtx.fillText('Enter: Completar', 50, 280);
+            }
+            
+            function isValidMove(piece, x, y) {
+                for (let py = 0; py < piece.shape.length; py++) {
+                    for (let px = 0; px < piece.shape[py].length; px++) {
+                        if (piece.shape[py][px]) {
+                            const newX = x + px;
+                            const newY = y + py;
+                            
+                            if (newX < 0 || newX >= BOARD_WIDTH || newY >= BOARD_HEIGHT) {
+                                return false;
+                            }
+                            
+                            if (newY >= 0 && board[newY][newX]) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+                return true;
+            }
+            
+            function placePiece() {
+                for (let y = 0; y < currentPiece.shape.length; y++) {
+                    for (let x = 0; x < currentPiece.shape[y].length; x++) {
+                        if (currentPiece.shape[y][x]) {
+                            const boardY = currentY + y;
+                            if (boardY >= 0) {
+                                board[boardY][currentX + x] = currentPiece.color;
+                            }
+                        }
+                    }
+                }
+                
+                // Verificar líneas completas
+                let linesCleared = 0;
+                for (let y = BOARD_HEIGHT - 1; y >= 0; y--) {
+                    if (board[y].every(cell => cell !== 0)) {
+                        board.splice(y, 1);
+                        board.unshift(Array(BOARD_WIDTH).fill(0));
+                        linesCleared++;
+                        y++; // Revisar la misma línea de nuevo
+                    }
+                }
+                
+                if (linesCleared > 0) {
+                    score += linesCleared * 100 * level;
+                    if (score >= level * 1000) {
+                        level++;
+                    }
+                }
+                
+                // Crear nueva pieza
+                currentPiece = createPiece();
+                currentX = Math.floor(BOARD_WIDTH / 2) - Math.floor(currentPiece.shape[0].length / 2);
+                currentY = 0;
+                
+                // Verificar game over
+                if (!isValidMove(currentPiece, currentX, currentY)) {
+                    gameRunning = false;
+                }
+            }
+            
+            function rotatePiece() {
+                const rotated = [];
+                for (let x = 0; x < currentPiece.shape[0].length; x++) {
+                    rotated[x] = [];
+                    for (let y = currentPiece.shape.length - 1; y >= 0; y--) {
+                        rotated[x][currentPiece.shape.length - 1 - y] = currentPiece.shape[y][x];
+                    }
+                }
+                
+                const originalShape = currentPiece.shape;
+                currentPiece.shape = rotated;
+                
+                if (!isValidMove(currentPiece, currentX, currentY)) {
+                    currentPiece.shape = originalShape;
+                }
+            }
+            
+            function updateTetris() {
+                if (!gameRunning) return;
+                
+                if (isValidMove(currentPiece, currentX, currentY + 1)) {
+                    currentY++;
+                } else {
+                    placePiece();
+                }
+            }
+            
+            function gameLoop() {
+                if (!gameRunning) return;
+                drawBoard();
+                updateTetris();
+                gameState.tetris.gameLoop = setTimeout(() => {
+                    gameLoop();
+                }, 1000 - level * 50);
+            }
+            
+            // Event listeners
+            function handleTetrisKeydown(e) {
+                if (!gameRunning) return;
+                
+                switch(e.key) {
+                    case 'ArrowLeft':
+                        if (isValidMove(currentPiece, currentX - 1, currentY)) {
+                            currentX--;
+                        }
+                        break;
+                    case 'ArrowRight':
+                        if (isValidMove(currentPiece, currentX + 1, currentY)) {
+                            currentX++;
+                        }
+                        break;
+                    case 'ArrowDown':
+                        if (isValidMove(currentPiece, currentX, currentY + 1)) {
+                            currentY++;
+                            score += 1;
+                        }
+                        break;
+                    case 'ArrowUp':
+                        rotatePiece();
+                        break;
+                    case 'Enter':
+                        // Completar juego
+                        completeGame('tetris', score);
+                        closeGame();
+                        return;
+                }
+                e.preventDefault();
+            }
+            
+            // Inicializar juego
+            currentPiece = createPiece();
+            currentX = Math.floor(BOARD_WIDTH / 2) - Math.floor(currentPiece.shape[0].length / 2);
+            currentY = 0;
+            
+            // Limpiar event listeners anteriores
+            document.removeEventListener('keydown', handleTetrisKeydown);
+            document.addEventListener('keydown', handleTetrisKeydown);
+            
+            // Guardar estado
+            gameState.tetris = {
+                gameLoop: null,
+                handleKeydown: handleTetrisKeydown,
+                stop: () => {
+                    gameRunning = false;
+                    document.removeEventListener('keydown', handleTetrisKeydown);
+                }
+            };
+            
+            gameLoop();
+        }
+        
+        function startMemoryGame() {
+            // Limpiar estado anterior
+            if (gameState.memory) {
+                gameState.memory.stop();
+            }
+            
+            // Variables del juego Memory
+            const GRID_SIZE = 4;
+            const CARD_WIDTH = 100;
+            const CARD_HEIGHT = 120;
+            const START_X = 200;
+            const START_Y = 100;
+            
+            let cards = [];
+            let flippedCards = [];
+            let matchedPairs = 0;
+            let score = 0;
+            let gameRunning = true;
+            
+            // Símbolos para las cartas
+            const SYMBOLS = ['🎮', '🎲', '🎯', '🎪', '🎨', '🎭', '🎪', '🎨'];
+            const COLORS = ['#00ff41', '#ff0000', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ff8800', '#8800ff'];
+            
+            function createCards() {
+                cards = [];
+                const symbols = [...SYMBOLS, ...SYMBOLS]; // Duplicar para hacer pares
+                
+                // Mezclar símbolos
+                for (let i = symbols.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [symbols[i], symbols[j]] = [symbols[j], symbols[i]];
+                }
+                
+                // Crear cartas
+                for (let y = 0; y < GRID_SIZE; y++) {
+                    for (let x = 0; x < GRID_SIZE; x++) {
+                        const index = y * GRID_SIZE + x;
+                        cards.push({
+                            id: index,
+                            symbol: symbols[index],
+                            color: COLORS[index % COLORS.length],
+                            x: START_X + x * (CARD_WIDTH + 10),
+                            y: START_Y + y * (CARD_HEIGHT + 10),
+                            isFlipped: false,
+                            isMatched: false
+                        });
+                    }
+                }
+            }
+            
+            function drawMemory() {
+                // Limpiar canvas
+                gameCtx.fillStyle = '#000';
+                gameCtx.fillRect(0, 0, 800, 600);
+                
+                // Dibujar título
+                gameCtx.fillStyle = '#00ff41';
+                gameCtx.font = '20px "Press Start 2P"';
+                gameCtx.fillText('MEMORY GAME', 300, 50);
+                
+                // Dibujar información
+                gameCtx.font = '14px "Press Start 2P"';
+                gameCtx.fillText(`Score: ${score}`, 50, 100);
+                gameCtx.fillText(`Pares: ${matchedPairs}/8`, 50, 130);
+                
+                // Dibujar cartas
+                cards.forEach(card => {
+                    // Fondo de la carta
+                    if (card.isFlipped || card.isMatched) {
+                        gameCtx.fillStyle = card.color;
+                    } else {
+                        gameCtx.fillStyle = '#333';
+                    }
+                    gameCtx.fillRect(card.x, card.y, CARD_WIDTH, CARD_HEIGHT);
+                    
+                    // Borde de la carta
+                    gameCtx.strokeStyle = '#00ff41';
+                    gameCtx.lineWidth = 2;
+                    gameCtx.strokeRect(card.x, card.y, CARD_WIDTH, CARD_HEIGHT);
+                    
+                    // Símbolo de la carta
+                    if (card.isFlipped || card.isMatched) {
+                        gameCtx.fillStyle = '#000';
+                        gameCtx.font = '40px Arial';
+                        gameCtx.textAlign = 'center';
+                        gameCtx.fillText(card.symbol, card.x + CARD_WIDTH/2, card.y + CARD_HEIGHT/2 + 10);
+                        gameCtx.textAlign = 'left';
+                    } else {
+                        gameCtx.fillStyle = '#00ff41';
+                        gameCtx.font = '20px "Press Start 2P"';
+                        gameCtx.fillText('?', card.x + CARD_WIDTH/2 - 5, card.y + CARD_HEIGHT/2 + 5);
+                    }
+                });
+                
+                // Dibujar instrucciones
+                gameCtx.fillStyle = '#00ff41';
+                gameCtx.font = '12px "Press Start 2P"';
+                gameCtx.fillText('Click en las cartas para encontrar pares', 50, 500);
+                gameCtx.fillText('Encuentra todos los pares para ganar', 50, 520);
+            }
+            
+            function getCardAtPosition(x, y) {
+                return cards.find(card => 
+                    x >= card.x && x <= card.x + CARD_WIDTH &&
+                    y >= card.y && y <= card.y + CARD_HEIGHT
+                );
+            }
+            
+            function flipCard(card) {
+                if (!card.isFlipped && !card.isMatched && flippedCards.length < 2) {
+                    card.isFlipped = true;
+                    flippedCards.push(card);
+                    
+                    if (flippedCards.length === 2) {
+                        setTimeout(() => {
+                            checkMatch();
+                        }, 1000);
+                    }
+                }
+            }
+            
+            function checkMatch() {
+                const [card1, card2] = flippedCards;
+                
+                if (card1.symbol === card2.symbol) {
+                    // Match encontrado
+                    card1.isMatched = true;
+                    card2.isMatched = true;
+                    matchedPairs++;
+                    score += 100;
+                    
+                    if (matchedPairs === 8) {
+                        // Juego completado
+                        score += 500; // Bonus por completar
+                        gameRunning = false;
+                        setTimeout(() => {
+                            completeGame('memory', score);
+                            closeGame();
+                        }, 1000);
+                    }
+                } else {
+                    // No hay match
+                    card1.isFlipped = false;
+                    card2.isFlipped = false;
+                }
+                
+                flippedCards = [];
+            }
+            
+            function handleMemoryClick(e) {
+                if (!gameRunning) return;
+                
+                const rect = gameCanvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const card = getCardAtPosition(x, y);
+                if (card) {
+                    flipCard(card);
+                }
+            }
+            
+            function gameLoop() {
+                if (!gameRunning) return;
+                drawMemory();
+                gameState.memory.gameLoop = requestAnimationFrame(gameLoop);
+            }
+            
+            // Inicializar juego
+            createCards();
+            
+            // Event listeners
+            gameCanvas.addEventListener('click', handleMemoryClick);
+            
+            // Guardar estado
+            gameState.memory = {
+                gameLoop: null,
+                handleClick: handleMemoryClick,
+                stop: () => {
+                    gameRunning = false;
+                    gameCanvas.removeEventListener('click', handleMemoryClick);
+                }
+            };
+            
+            gameLoop();
+        }
+        
+        function startSimonGame() {
+            // Limpiar estado anterior
+            if (gameState.simon) {
+                gameState.simon.stop();
+            }
+            
+            // Variables del juego Simon
+            const BUTTON_SIZE = 80;
+            const CENTER_X = 400;
+            const CENTER_Y = 300;
+            
+            let sequence = [];
+            let playerSequence = [];
+            let currentLevel = 1;
+            let score = 0;
+            let gameRunning = true;
+            let isShowingSequence = false;
+            let isPlayerTurn = false;
+            
+            // Colores de los botones
+            const BUTTONS = [
+                { color: '#ff0000', x: CENTER_X + BUTTON_SIZE, y: CENTER_Y - BUTTON_SIZE, key: 'ArrowRight' },
+                { color: '#00ff00', x: CENTER_X - BUTTON_SIZE, y: CENTER_Y - BUTTON_SIZE, key: 'ArrowLeft' },
+                { color: '#0000ff', x: CENTER_X - BUTTON_SIZE, y: CENTER_Y + BUTTON_SIZE, key: 'ArrowDown' },
+                { color: '#ffff00', x: CENTER_X + BUTTON_SIZE, y: CENTER_Y + BUTTON_SIZE, key: 'ArrowUp' }
+            ];
+            
+            function drawSimon() {
+                // Limpiar canvas
+                gameCtx.fillStyle = '#000';
+                gameCtx.fillRect(0, 0, 800, 600);
+                
+                // Dibujar título
+                gameCtx.fillStyle = '#00ff41';
+                gameCtx.font = '20px "Press Start 2P"';
+                gameCtx.fillText('SIMON GAME', 300, 50);
+                
+                // Dibujar información
+                gameCtx.font = '14px "Press Start 2P"';
+                gameCtx.fillText(`Score: ${score}`, 50, 100);
+                gameCtx.fillText(`Level: ${currentLevel}`, 50, 130);
+                
+                // Dibujar botones
+                BUTTONS.forEach((button, index) => {
+                    // Determinar si el botón está activo
+                    let isActive = false;
+                    if (isShowingSequence && sequence.length > 0) {
+                        const currentStep = Math.floor((Date.now() - sequenceStartTime) / 500);
+                        if (currentStep < sequence.length && sequence[currentStep] === index) {
+                            isActive = true;
+                        }
+                    }
+                    
+                    // Color del botón
+                    const buttonColor = isActive ? '#ffffff' : button.color;
+                    gameCtx.fillStyle = buttonColor;
+                    gameCtx.fillRect(button.x, button.y, BUTTON_SIZE, BUTTON_SIZE);
+                    
+                    // Borde del botón
+                    gameCtx.strokeStyle = '#00ff41';
+                    gameCtx.lineWidth = 3;
+                    gameCtx.strokeRect(button.x, button.y, BUTTON_SIZE, BUTTON_SIZE);
+                    
+                    // Número del botón
+                    gameCtx.fillStyle = '#000';
+                    gameCtx.font = '20px "Press Start 2P"';
+                    gameCtx.textAlign = 'center';
+                    gameCtx.fillText(index + 1, button.x + BUTTON_SIZE/2, button.y + BUTTON_SIZE/2 + 5);
+                });
+                
+                gameCtx.textAlign = 'left';
+                
+                // Dibujar instrucciones
+                gameCtx.fillStyle = '#00ff41';
+                gameCtx.font = '12px "Press Start 2P"';
+                if (isShowingSequence) {
+                    gameCtx.fillText('Observa la secuencia...', 50, 500);
+                } else if (isPlayerTurn) {
+                    gameCtx.fillText('Repite la secuencia con las flechas', 50, 500);
+                } else {
+                    gameCtx.fillText('Presiona Enter para comenzar', 50, 500);
+                }
+            }
+            
+            function generateSequence() {
+                sequence = [];
+                for (let i = 0; i < currentLevel; i++) {
+                    sequence.push(Math.floor(Math.random() * 4));
+                }
+            }
+            
+            let sequenceStartTime = 0;
+            
+            function showSequence() {
+                isShowingSequence = true;
+                isPlayerTurn = false;
+                playerSequence = [];
+                sequenceStartTime = Date.now();
+                
+                setTimeout(() => {
+                    isShowingSequence = false;
+                    isPlayerTurn = true;
+                }, sequence.length * 500 + 1000);
+            }
+            
+            function checkPlayerInput(key) {
+                if (!isPlayerTurn) return;
+                
+                let buttonIndex = -1;
+                switch(key) {
+                    case 'ArrowRight': buttonIndex = 0; break;
+                    case 'ArrowLeft': buttonIndex = 1; break;
+                    case 'ArrowDown': buttonIndex = 2; break;
+                    case 'ArrowUp': buttonIndex = 3; break;
+                }
+                
+                if (buttonIndex !== -1) {
+                    playerSequence.push(buttonIndex);
+                    
+                    // Verificar si la secuencia es correcta
+                    if (playerSequence[playerSequence.length - 1] !== sequence[playerSequence.length - 1]) {
+                        // Secuencia incorrecta
+                        gameRunning = false;
+                        setTimeout(() => {
+                            completeGame('simon', score);
+                            closeGame();
+                        }, 1000);
+                        return;
+                    }
+                    
+                    // Verificar si completó la secuencia
+                    if (playerSequence.length === sequence.length) {
+                        // Nivel completado
+                        score += currentLevel * 100;
+                        currentLevel++;
+                        setTimeout(() => {
+                            generateSequence();
+                            showSequence();
+                        }, 1000);
+                    }
+                }
+            }
+            
+            function handleSimonKeydown(e) {
+                if (!gameRunning) return;
+                
+                if (e.key === 'Enter' && !isShowingSequence && !isPlayerTurn) {
+                    generateSequence();
+                    showSequence();
+                } else if (isPlayerTurn) {
+                    checkPlayerInput(e.key);
+                }
+                
+                e.preventDefault();
+            }
+            
+            function gameLoop() {
+                if (!gameRunning) return;
+                drawSimon();
+                gameState.simon.gameLoop = requestAnimationFrame(gameLoop);
+            }
+            
+            // Event listeners
+            document.removeEventListener('keydown', handleSimonKeydown);
+            document.addEventListener('keydown', handleSimonKeydown);
+            
+            // Guardar estado
+            gameState.simon = {
+                gameLoop: null,
+                handleKeydown: handleSimonKeydown,
+                stop: () => {
+                    gameRunning = false;
+                    document.removeEventListener('keydown', handleSimonKeydown);
+                }
+            };
+            
+            gameLoop();
+        }
+        
+        function startBreakoutGame() {
+            // Limpiar estado anterior
+            if (gameState.breakout) {
+                gameState.breakout.stop();
+            }
+            
+            // Variables del juego Breakout
+            const PADDLE_WIDTH = 100;
+            const PADDLE_HEIGHT = 10;
+            const BALL_SIZE = 8;
+            const BRICK_ROWS = 5;
+            const BRICK_COLS = 10;
+            const BRICK_WIDTH = 70;
+            const BRICK_HEIGHT = 20;
+            const BRICK_PADDING = 5;
+            
+            let paddleX = 350;
+            let ballX = 400;
+            let ballY = 500;
+            let ballSpeedX = 3;
+            let ballSpeedY = -3;
+            let score = 0;
+            let lives = 3;
+            let gameRunning = true;
+            let bricks = [];
+            
+            // Colores de los bloques
+            const BRICK_COLORS = ['#ff0000', '#ff8800', '#ffff00', '#00ff00', '#0000ff'];
+            
+            function createBricks() {
+                bricks = [];
+                for (let row = 0; row < BRICK_ROWS; row++) {
+                    for (let col = 0; col < BRICK_COLS; col++) {
+                        bricks.push({
+                            x: col * (BRICK_WIDTH + BRICK_PADDING) + 50,
+                            y: row * (BRICK_HEIGHT + BRICK_PADDING) + 50,
+                            width: BRICK_WIDTH,
+                            height: BRICK_HEIGHT,
+                            color: BRICK_COLORS[row],
+                            visible: true
+                        });
+                    }
+                }
+            }
+            
+            function drawBreakout() {
+                // Limpiar canvas
+                gameCtx.fillStyle = '#000';
+                gameCtx.fillRect(0, 0, 800, 600);
+                
+                // Dibujar título
+                gameCtx.fillStyle = '#00ff41';
+                gameCtx.font = '20px "Press Start 2P"';
+                gameCtx.fillText('BREAKOUT', 300, 30);
+                
+                // Dibujar información
+                gameCtx.font = '14px "Press Start 2P"';
+                gameCtx.fillText(`Score: ${score}`, 50, 100);
+                gameCtx.fillText(`Lives: ${lives}`, 50, 130);
+                
+                // Dibujar bloques
+                bricks.forEach(brick => {
+                    if (brick.visible) {
+                        gameCtx.fillStyle = brick.color;
+                        gameCtx.fillRect(brick.x, brick.y, brick.width, brick.height);
+                        
+                        gameCtx.strokeStyle = '#00ff41';
+                        gameCtx.lineWidth = 1;
+                        gameCtx.strokeRect(brick.x, brick.y, brick.width, brick.height);
+                    }
+                });
+                
+                // Dibujar paleta
+                gameCtx.fillStyle = '#00ff41';
+                gameCtx.fillRect(paddleX, 550, PADDLE_WIDTH, PADDLE_HEIGHT);
+                
+                // Dibujar pelota
+                gameCtx.fillStyle = '#00ff41';
+                gameCtx.fillRect(ballX, ballY, BALL_SIZE, BALL_SIZE);
+                
+                // Dibujar instrucciones
+                gameCtx.fillStyle = '#00ff41';
+                gameCtx.font = '12px "Press Start 2P"';
+                gameCtx.fillText('Usa ←/→ para mover la paleta', 50, 580);
+                gameCtx.fillText('Rompe todos los bloques para ganar', 50, 600);
+            }
+            
+            function updateBreakout() {
+                if (!gameRunning) return;
+                
+                // Mover pelota
+                ballX += ballSpeedX;
+                ballY += ballSpeedY;
+                
+                // Rebote en paredes
+                if (ballX <= 0 || ballX >= 800 - BALL_SIZE) {
+                    ballSpeedX = -ballSpeedX;
+                }
+                if (ballY <= 0) {
+                    ballSpeedY = -ballSpeedY;
+                }
+                
+                // Rebote en paleta
+                if (ballY >= 550 - BALL_SIZE && ballY <= 550 + PADDLE_HEIGHT &&
+                    ballX >= paddleX && ballX <= paddleX + PADDLE_WIDTH) {
+                    ballSpeedY = -ballSpeedY;
+                    // Ajustar dirección según donde golpea la pelota
+                    const hitPoint = (ballX - paddleX) / PADDLE_WIDTH;
+                    ballSpeedX = (hitPoint - 0.5) * 6;
+                }
+                
+                // Verificar colisión con bloques
+                bricks.forEach(brick => {
+                    if (brick.visible) {
+                        if (ballX >= brick.x && ballX <= brick.x + brick.width &&
+                            ballY >= brick.y && ballY <= brick.y + brick.height) {
+                            brick.visible = false;
+                            ballSpeedY = -ballSpeedY;
+                            score += 10;
+                            
+                            // Verificar si todos los bloques están destruidos
+                            if (bricks.every(b => !b.visible)) {
+                                gameRunning = false;
+                                setTimeout(() => {
+                                    completeGame('breakout', score);
+                                    closeGame();
+                                }, 1000);
+                            }
+                        }
+                    }
+                });
+                
+                // Verificar si la pelota se perdió
+                if (ballY >= 600) {
+                    lives--;
+                    if (lives <= 0) {
+                        gameRunning = false;
+                        setTimeout(() => {
+                            completeGame('breakout', score);
+                            closeGame();
+                        }, 1000);
+                    } else {
+                        // Resetear pelota
+                        ballX = 400;
+                        ballY = 500;
+                        ballSpeedX = 3;
+                        ballSpeedY = -3;
+                    }
+                }
+            }
+            
+            function handleBreakoutKeydown(e) {
+                if (!gameRunning) return;
+                
+                switch(e.key) {
+                    case 'ArrowLeft':
+                        paddleX = Math.max(0, paddleX - 20);
+                        break;
+                    case 'ArrowRight':
+                        paddleX = Math.min(800 - PADDLE_WIDTH, paddleX + 20);
+                        break;
+                    case 'Enter':
+                        // Completar juego
+                        completeGame('breakout', score);
+                        closeGame();
+                        return;
+                }
+                e.preventDefault();
+            }
+            
+            function gameLoop() {
+                if (!gameRunning) return;
+                drawBreakout();
+                updateBreakout();
+                gameState.breakout.gameLoop = requestAnimationFrame(gameLoop);
+            }
+            
+            // Inicializar juego
+            createBricks();
+            
+            // Event listeners
+            document.removeEventListener('keydown', handleBreakoutKeydown);
+            document.addEventListener('keydown', handleBreakoutKeydown);
+            
+            // Guardar estado
+            gameState.breakout = {
+                gameLoop: null,
+                handleKeydown: handleBreakoutKeydown,
+                stop: () => {
+                    gameRunning = false;
+                    document.removeEventListener('keydown', handleBreakoutKeydown);
+                }
+            };
+            
+            gameLoop();
+        }
+        
+        function start2048Game() {
+            // Limpiar estado anterior
+            if (gameState['2048']) {
+                gameState['2048'].stop();
+            }
+            
+            // Variables del juego 2048
+            const GRID_SIZE = 4;
+            const CELL_SIZE = 100;
+            const CELL_PADDING = 10;
+            const START_X = 200;
+            const START_Y = 100;
+            
+            let grid = [];
+            let score = 0;
+            let gameRunning = true;
+            
+            // Colores para los números
+            const CELL_COLORS = {
+                2: '#eee4da',
+                4: '#ede0c8',
+                8: '#f2b179',
+                16: '#f59563',
+                32: '#f67c5f',
+                64: '#f65e3b',
+                128: '#edcf72',
+                256: '#edcc61',
+                512: '#edc850',
+                1024: '#edc53f',
+                2048: '#edc22e'
+            };
+            
+            function initGrid() {
+                grid = Array(GRID_SIZE).fill().map(() => Array(GRID_SIZE).fill(0));
+                addRandomTile();
+                addRandomTile();
+            }
+            
+            function addRandomTile() {
+                const emptyCells = [];
+                for (let y = 0; y < GRID_SIZE; y++) {
+                    for (let x = 0; x < GRID_SIZE; x++) {
+                        if (grid[y][x] === 0) {
+                            emptyCells.push({x, y});
+                        }
+                    }
+                }
+                
+                if (emptyCells.length > 0) {
+                    const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+                    grid[randomCell.y][randomCell.x] = Math.random() < 0.9 ? 2 : 4;
+                }
+            }
+            
+            function draw2048() {
+                // Limpiar canvas
+                gameCtx.fillStyle = '#000';
+                gameCtx.fillRect(0, 0, 800, 600);
+                
+                // Dibujar título
+                gameCtx.fillStyle = '#00ff41';
+                gameCtx.font = '20px "Press Start 2P"';
+                gameCtx.fillText('2048 GAME', 300, 50);
+                
+                // Dibujar información
+                gameCtx.font = '14px "Press Start 2P"';
+                gameCtx.fillText(`Score: ${score}`, 50, 100);
+                
+                // Dibujar grid
+                for (let y = 0; y < GRID_SIZE; y++) {
+                    for (let x = 0; x < GRID_SIZE; x++) {
+                        const cellX = START_X + x * (CELL_SIZE + CELL_PADDING);
+                        const cellY = START_Y + y * (CELL_SIZE + CELL_PADDING);
+                        const value = grid[y][x];
+                        
+                        // Fondo de la celda
+                        if (value === 0) {
+                            gameCtx.fillStyle = '#cdc1b4';
+                        } else {
+                            gameCtx.fillStyle = CELL_COLORS[value] || '#ff0000';
+                        }
+                        
+                        gameCtx.fillRect(cellX, cellY, CELL_SIZE, CELL_SIZE);
+                        
+                        // Borde de la celda
+                        gameCtx.strokeStyle = '#00ff41';
+                        gameCtx.lineWidth = 2;
+                        gameCtx.strokeRect(cellX, cellY, CELL_SIZE, CELL_SIZE);
+                        
+                        // Número en la celda
+                        if (value !== 0) {
+                            gameCtx.fillStyle = value <= 4 ? '#776e65' : '#f9f6f2';
+                            gameCtx.font = value >= 1024 ? '24px "Press Start 2P"' : '32px "Press Start 2P"';
+                            gameCtx.textAlign = 'center';
+                            gameCtx.fillText(value.toString(), cellX + CELL_SIZE/2, cellY + CELL_SIZE/2 + 10);
+                        }
+                    }
+                }
+                
+                gameCtx.textAlign = 'left';
+                
+                // Dibujar instrucciones
+                gameCtx.fillStyle = '#00ff41';
+                gameCtx.font = '12px "Press Start 2P"';
+                gameCtx.fillText('Usa ←/→/↑/↓ para mover', 50, 500);
+                gameCtx.fillText('Combina números iguales', 50, 520);
+                gameCtx.fillText('Llega a 2048 para ganar', 50, 540);
+            }
+            
+            function moveGrid(direction) {
+                let moved = false;
+                const newGrid = Array(GRID_SIZE).fill().map(() => Array(GRID_SIZE).fill(0));
+                
+                if (direction === 'left' || direction === 'right') {
+                    for (let y = 0; y < GRID_SIZE; y++) {
+                        const row = grid[y].filter(cell => cell !== 0);
+                        
+                        if (direction === 'right') {
+                            row.reverse();
+                        }
+                        
+                        // Combinar números iguales
+                        for (let i = 0; i < row.length - 1; i++) {
+                            if (row[i] === row[i + 1]) {
+                                row[i] *= 2;
+                                score += row[i];
+                                row.splice(i + 1, 1);
+                            }
+                        }
+                        
+                        // Llenar con ceros
+                        while (row.length < GRID_SIZE) {
+                            if (direction === 'right') {
+                                row.unshift(0);
+                            } else {
+                                row.push(0);
+                            }
+                        }
+                        
+                        if (direction === 'right') {
+                            row.reverse();
+                        }
+                        
+                        newGrid[y] = row;
+                        if (JSON.stringify(grid[y]) !== JSON.stringify(row)) {
+                            moved = true;
+                        }
+                    }
+                } else {
+                    for (let x = 0; x < GRID_SIZE; x++) {
+                        const column = [];
+                        for (let y = 0; y < GRID_SIZE; y++) {
+                            if (grid[y][x] !== 0) {
+                                column.push(grid[y][x]);
+                            }
+                        }
+                        
+                        if (direction === 'down') {
+                            column.reverse();
+                        }
+                        
+                        // Combinar números iguales
+                        for (let i = 0; i < column.length - 1; i++) {
+                            if (column[i] === column[i + 1]) {
+                                column[i] *= 2;
+                                score += column[i];
+                                column.splice(i + 1, 1);
+                            }
+                        }
+                        
+                        // Llenar con ceros
+                        while (column.length < GRID_SIZE) {
+                            if (direction === 'down') {
+                                column.unshift(0);
+                            } else {
+                                column.push(0);
+                            }
+                        }
+                        
+                        if (direction === 'down') {
+                            column.reverse();
+                        }
+                        
+                        // Colocar en el nuevo grid
+                        for (let y = 0; y < GRID_SIZE; y++) {
+                            newGrid[y][x] = column[y];
+                        }
+                        
+                        if (JSON.stringify(grid.map(row => row[x])) !== JSON.stringify(column)) {
+                            moved = true;
+                        }
+                    }
+                }
+                
+                if (moved) {
+                    grid = newGrid;
+                    addRandomTile();
+                    
+                    // Verificar si ganó
+                    for (let y = 0; y < GRID_SIZE; y++) {
+                        for (let x = 0; x < GRID_SIZE; x++) {
+                            if (grid[y][x] === 2048) {
+                                gameRunning = false;
+                                setTimeout(() => {
+                                    completeGame('2048', score);
+                                    closeGame();
+                                }, 1000);
+                                return;
+                            }
+                        }
+                    }
+                    
+                    // Verificar si perdió
+                    if (!canMove()) {
+                        gameRunning = false;
+                        setTimeout(() => {
+                            completeGame('2048', score);
+                            closeGame();
+                        }, 1000);
+                    }
+                }
+            }
+            
+            function canMove() {
+                // Verificar si hay celdas vacías
+                for (let y = 0; y < GRID_SIZE; y++) {
+                    for (let x = 0; x < GRID_SIZE; x++) {
+                        if (grid[y][x] === 0) return true;
+                    }
+                }
+                
+                // Verificar si se pueden combinar
+                for (let y = 0; y < GRID_SIZE; y++) {
+                    for (let x = 0; x < GRID_SIZE; x++) {
+                        const current = grid[y][x];
+                        if ((x < GRID_SIZE - 1 && grid[y][x + 1] === current) ||
+                            (y < GRID_SIZE - 1 && grid[y + 1][x] === current)) {
+                            return true;
+                        }
+                    }
+                }
+                
+                return false;
+            }
+            
+            function handle2048Keydown(e) {
+                if (!gameRunning) return;
+                
+                switch(e.key) {
+                    case 'ArrowLeft':
+                        moveGrid('left');
+                        break;
+                    case 'ArrowRight':
+                        moveGrid('right');
+                        break;
+                    case 'ArrowUp':
+                        moveGrid('up');
+                        break;
+                    case 'ArrowDown':
+                        moveGrid('down');
+                        break;
+                    case 'Enter':
+                        // Completar juego
+                        completeGame('2048', score);
+                        closeGame();
+                        return;
+                }
+                e.preventDefault();
+            }
+            
+            function gameLoop() {
+                if (!gameRunning) return;
+                draw2048();
+                gameState['2048'].gameLoop = requestAnimationFrame(gameLoop);
+            }
+            
+            // Inicializar juego
+            initGrid();
+            
+            // Event listeners
+            document.removeEventListener('keydown', handle2048Keydown);
+            document.addEventListener('keydown', handle2048Keydown);
+            
+            // Guardar estado
+            gameState['2048'] = {
+                gameLoop: null,
+                handleKeydown: handle2048Keydown,
+                stop: () => {
+                    gameRunning = false;
+                    document.removeEventListener('keydown', handle2048Keydown);
+                }
+            };
+            
+            gameLoop();
+        }
+        
+        // 🎮 FUNCIÓN PARA COMPLETAR JUEGOS
+        async function completeGame(gameType, score) {
+            if (!authToken) {
+                showMessage('❌ Debes iniciar sesión', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/games/complete', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + authToken
+                    },
+                    body: JSON.stringify({ gameType, score })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    currentUser = { ...currentUser, ...data.user };
+                    updateDisplay();
+                    showMessage(data.message, 'success');
+                    
+                    // Efecto de monedas ganadas
+                    const coinsDisplay = document.getElementById('coins-display');
+                    coinsDisplay.style.transform = 'scale(1.2)';
+                    coinsDisplay.style.color = '#ffff00';
+                    setTimeout(() => {
+                        coinsDisplay.style.transform = 'scale(1)';
+                        coinsDisplay.style.color = '#00ff41';
+                    }, 500);
+                    
+                } else {
+                    showMessage('❌ ' + data.error, 'error');
+                }
+            } catch (error) {
+                showMessage('❌ Error de conexión', 'error');
+            }
+        }
+        
+        // 🔄 DECAY AUTOMÁTICO
+        setInterval(async () => {
+            if (authToken) {
+                try {
+                    await fetch('/api/tamagotchi/decay', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': 'Bearer ' + authToken
+                        }
+                    });
+                } catch (error) {
+                    console.error('Error en decay automático:', error);
+                }
+            }
+        }, 30000); // Cada 30 segundos
+        
+        // 🔐 VERIFICAR AUTENTICACIÓN AL CARGAR
+        window.addEventListener('load', () => {
+            const savedToken = localStorage.getItem('authToken');
+            const savedUser = localStorage.getItem('currentUser');
+            
+            if (savedToken && savedUser) {
+                try {
+                    authToken = savedToken;
+                    currentUser = JSON.parse(savedUser);
+                    showMainSection();
+                    startStatsTimer();
+                    loadStatsFromStorage();
+                } catch (error) {
+                    console.error('Error cargando sesión:', error);
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('currentUser');
+                }
+            }
+        });
+        
+        // 💾 GUARDAR SESIÓN
+        function saveSession() {
+            if (authToken && currentUser) {
+                localStorage.setItem('authToken', authToken);
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            }
+        }
+        
+        // 📊 SISTEMA DE STATS AUTOMÁTICO
+        let statsTimer = null;
+        
+        function startStatsTimer() {
+            if (statsTimer) clearInterval(statsTimer);
+            
+            statsTimer = setInterval(() => {
+                if (currentUser && currentUser.stats) {
+                    // Decay automático de stats
+                    currentUser.stats.hunger = Math.max(0, currentUser.stats.hunger - 1);
+                    currentUser.stats.happiness = Math.max(0, currentUser.stats.happiness - 0.5);
+                    currentUser.stats.energy = Math.max(0, currentUser.stats.energy - 0.8);
+                    
+                    // Guardar en localStorage
+                    localStorage.setItem('tamagotchiStats', JSON.stringify(currentUser.stats));
+                    
+                    // Actualizar UI
+                    updateDisplay();
+                    
+                    // Cambiar color de barras según nivel
+                    updateStatColors();
+                }
+            }, 60000); // Cada minuto
+        }
+        
+        function updateStatColors() {
+            const hungerBar = document.getElementById('hunger-bar');
+            const happinessBar = document.getElementById('happiness-bar');
+            const energyBar = document.getElementById('energy-bar');
+            
+            if (currentUser && currentUser.stats) {
+                // Hambre
+                if (currentUser.stats.hunger < 30) {
+                    hungerBar.style.background = 'linear-gradient(90deg, #ff0000, #ff4444)';
+                } else if (currentUser.stats.hunger < 60) {
+                    hungerBar.style.background = 'linear-gradient(90deg, #ffff00, #ffff44)';
+                } else {
+                    hungerBar.style.background = 'linear-gradient(90deg, #00ff41, #00cc33)';
+                }
+                
+                // Felicidad
+                if (currentUser.stats.happiness < 30) {
+                    happinessBar.style.background = 'linear-gradient(90deg, #ff0000, #ff4444)';
+                } else if (currentUser.stats.happiness < 60) {
+                    happinessBar.style.background = 'linear-gradient(90deg, #ffff00, #ffff44)';
+                } else {
+                    happinessBar.style.background = 'linear-gradient(90deg, #00ff41, #00cc33)';
+                }
+                
+                // Energía
+                if (currentUser.stats.energy < 30) {
+                    energyBar.style.background = 'linear-gradient(90deg, #ff0000, #ff4444)';
+                } else if (currentUser.stats.energy < 60) {
+                    energyBar.style.background = 'linear-gradient(90deg, #ffff00, #ffff44)';
+                } else {
+                    energyBar.style.background = 'linear-gradient(90deg, #00ff41, #00cc33)';
+                }
+            }
+        }
+        
+        // Cargar stats desde localStorage al iniciar
+        function loadStatsFromStorage() {
+            const savedStats = localStorage.getItem('tamagotchiStats');
+            if (savedStats && currentUser) {
+                const stats = JSON.parse(savedStats);
+                currentUser.stats = { ...currentUser.stats, ...stats };
+                updateDisplay();
+                updateStatColors();
+            }
+        }
+
+        function simulateGameComplete() {
+            if (!authToken) {
+                showMessage('❌ Debes iniciar sesión', 'error');
+                return;
+            }
+            const finalScore = Math.floor(Math.random() * 500) + 100; // Score aleatorio entre 100-600
+            completeGame(currentGame, finalScore);
+            showMessage(`🎮 ¡Juego ${currentGame.toUpperCase()} completado! +${Math.floor(finalScore/10)} monedas`, 'success');
+        }
+    </script>
+</body>
+</html> 

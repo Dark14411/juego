@@ -7,7 +7,7 @@ module.exports = {
     JWT_SECRET: process.env.JWT_SECRET || 'retro-arcade-secret-key-2024',
     
     // Puerto del servidor
-    PORT: process.env.PORT || 8082,
+    PORT: process.env.PORT || 8083,
     
     // Configuración de MongoDB
     MONGODB_OPTIONS: {

@@ -1,276 +1,143 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { 
-  Gamepad2, 
-  Trophy, 
-  Star,
-  Zap,
-  Target,
-  Puzzle,
-  Grid3X3,
-  Play
-} from 'lucide-react'
+import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
-interface ArcadeGame {
-  id: string
-  name: string
-  icon: React.ReactNode
-  description: string
-  difficulty: 'Fácil' | 'Medio' | 'Difícil'
-  category: string
-  gradient: string
+interface ArcadeModePanelProps {
+  onGameComplete: (game: string, score: number) => void;
 }
 
-interface ArcadeModeProps {
-  onStartGame?: (gameId: string) => void
-}
-
-export default function ArcadeModePanel({ onStartGame }: ArcadeModeProps) {
-  const [selectedGame, setSelectedGame] = useState<string | null>(null)
-
-  const arcadeGames: ArcadeGame[] = [
+export function ArcadeModePanel({ onGameComplete }: ArcadeModePanelProps) {
+  const games = [
     {
       id: 'pong',
-      name: '🏓 Pong Retro',
-      icon: <Target className="w-8 h-8" />,
-      description: 'El clásico juego de ping pong con gráficos retro. Controla tu paleta y vence a la IA.',
-      difficulty: 'Medio',
-      category: 'Deportes',
-      gradient: 'from-blue-500 to-cyan-500'
+      name: 'PONG',
+      description: 'Clásico juego de paletas con IA rival',
+      icon: '🏓',
+      color: 'from-blue-600 to-cyan-600',
+      controls: 'W/S o Flechas'
     },
     {
       id: 'tetris',
-      name: '🧩 Tetris Pro',
-      icon: <Grid3X3 className="w-8 h-8" />,
-      description: 'Organiza los bloques que caen para formar líneas completas. ¡El puzzle más adictivo!',
-      difficulty: 'Medio',
-      category: 'Puzzle',
-      gradient: 'from-purple-500 to-pink-500'
-    },
-    {
-      id: 'breakout',
-      name: '🧱 Breakout Classic',
-      icon: <Zap className="w-8 h-8" />,
-      description: 'Rompe todos los ladrillos rebotando la pelota con tu paleta. ¡Acción pura!',
-      difficulty: 'Fácil',
-      category: 'Arcade',
-      gradient: 'from-orange-500 to-red-500'
+      name: 'TETRIS',
+      description: 'Piezas que caen, forma líneas',
+      icon: '🧩',
+      color: 'from-purple-600 to-pink-600',
+      controls: 'Flechas'
     },
     {
       id: 'memory',
-      name: '🧠 Memory Challenge',
-      icon: <Puzzle className="w-8 h-8" />,
-      description: 'Pon a prueba tu memoria encontrando las parejas de cartas. Entrena tu cerebro.',
-      difficulty: 'Fácil',
-      category: 'Mental',
-      gradient: 'from-green-500 to-emerald-500'
+      name: 'MEMORY',
+      description: 'Encuentra las parejas de cartas',
+      icon: '🧠',
+      color: 'from-green-600 to-emerald-600',
+      controls: 'Click'
     },
     {
       id: 'simon',
-      name: '🎵 Simon Says',
-      icon: <Star className="w-8 h-8" />,
-      description: 'Repite la secuencia de colores y sonidos. ¿Hasta dónde puedes llegar?',
-      difficulty: 'Medio',
-      category: 'Musical',
-      gradient: 'from-yellow-500 to-orange-500'
+      name: 'SIMON',
+      description: 'Repite la secuencia de colores',
+      icon: '🎵',
+      color: 'from-yellow-600 to-orange-600',
+      controls: 'Click'
+    },
+    {
+      id: 'breakout',
+      name: 'BREAKOUT',
+      description: 'Rompe bloques con la pelota',
+      icon: '🏀',
+      color: 'from-red-600 to-pink-600',
+      controls: '←/→'
     },
     {
       id: '2048',
-      name: '🔢 2048 Fusion',
-      icon: <Grid3X3 className="w-8 h-8" />,
-      description: 'Combina números para llegar al 2048. Estrategia y matemáticas en acción.',
-      difficulty: 'Difícil',
-      category: 'Matemática',
-      gradient: 'from-indigo-500 to-purple-500'
+      name: '2048',
+      description: 'Combina números hasta 2048',
+      icon: '🔢',
+      color: 'from-indigo-600 to-purple-600',
+      controls: 'Flechas'
     }
-  ]
+  ];
 
-  const handleGameSelect = (gameId: string) => {
-    setSelectedGame(gameId)
-    if (onStartGame) {
-      onStartGame(gameId)
-    }
-  }
-
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case 'Fácil': return 'bg-green-500'
-      case 'Medio': return 'bg-yellow-500'
-      case 'Difícil': return 'bg-red-500'
-      default: return 'bg-gray-500'
-    }
-  }
-
-  const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case 'Deportes': return '🏓'
-      case 'Puzzle': return '🧩'
-      case 'Arcade': return '🕹️'
-      case 'Mental': return '🧠'
-      case 'Musical': return '🎵'
-      case 'Matemática': return '🔢'
-      default: return '🎮'
-    }
-  }
+  const startGame = (gameId: string) => {
+    // Simular inicio de juego
+    console.log(`🎮 Iniciando ${gameId}...`);
+    
+    // Simular score después de jugar
+    setTimeout(() => {
+      const score = Math.floor(Math.random() * 1000) + 100;
+      onGameComplete(gameId, score);
+    }, 2000);
+  };
 
   return (
-    <div className="space-y-6 max-h-screen overflow-y-auto">
-      {/* 🎮 HEADER */}
-      <Card className="bg-gradient-to-br from-cyan-600 via-blue-600 to-indigo-600 text-white border-0 shadow-2xl">
+    <div className="space-y-6">
+      <Card className="bg-gradient-to-r from-purple-600 to-blue-600 border-2 border-purple-400">
         <CardHeader>
-          <CardTitle className="flex items-center gap-3 text-3xl font-bold">
-            <Gamepad2 className="w-10 h-10 text-cyan-300" />
-            🕹️ Modo Retro Arcade
-            <Badge variant="secondary" className="bg-white/20 text-white">
-              {arcadeGames.length} Juegos
-            </Badge>
-          </CardTitle>
-          <p className="text-lg opacity-90">
-            Juegos clásicos retro con controles mejorados para producción
-          </p>
+          <CardTitle className="text-center text-2xl">🕹️ Retro Arcade</CardTitle>
+          <p className="text-center opacity-80">¡Juega y gana monedas!</p>
         </CardHeader>
       </Card>
 
-      {/* 🎮 SELECCIÓN DE JUEGOS */}
+      {/* 🎮 GRID DE JUEGOS */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {arcadeGames.map((game) => (
-          <Card 
-            key={game.id}
-            className={`
-              relative overflow-hidden border-2 transition-all duration-300 hover:scale-105 cursor-pointer
-              ${selectedGame === game.id 
-                ? 'border-cyan-400 shadow-lg shadow-cyan-400/50 scale-105' 
-                : 'border-gray-600 hover:border-cyan-300'
-              }
-              bg-gradient-to-br from-gray-900 to-gray-800
-            `}
-            onClick={() => setSelectedGame(game.id)}
-          >
-            {/* HEADER GRADIENT */}
-            <div className={`h-3 w-full bg-gradient-to-r ${game.gradient}`} />
-
-            <CardContent className="p-6">
-              <div className="text-center space-y-4">
-                {/* ICON */}
-                <div className={`w-20 h-20 mx-auto rounded-full bg-gradient-to-br ${game.gradient} flex items-center justify-center text-white shadow-2xl`}>
-                  {game.icon}
-                </div>
-
-                {/* INFO */}
-                <div>
-                  <h3 className="text-xl font-bold text-white mb-2">{game.name}</h3>
-                  <p className="text-sm text-gray-300 mb-4 leading-relaxed">
-                    {game.description}
-                  </p>
-                </div>
-
-                {/* BADGES */}
-                <div className="flex justify-center gap-2 mb-4">
-                  <Badge className={`${getDifficultyColor(game.difficulty)} text-white font-semibold`}>
-                    {game.difficulty}
-                  </Badge>
-                  <Badge variant="outline" className="border-gray-400 text-gray-300">
-                    {getCategoryIcon(game.category)} {game.category}
-                  </Badge>
-                </div>
-
-                {/* BOTÓN DE JUGAR */}
-                <Button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleGameSelect(game.id)
-                  }}
-                  className={`w-full font-bold py-3 transition-all bg-gradient-to-r ${game.gradient} hover:shadow-lg hover:shadow-${game.gradient.split('-')[1]}-500/50`}
-                  size="lg"
-                >
-                  <Play className="w-5 h-5 mr-2" />
-                  ¡Jugar Ahora!
-                </Button>
+        {games.map((game) => (
+          <Card key={game.id} className={`bg-gradient-to-br ${game.color} border-2 border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105 cursor-pointer`}>
+            <CardContent className="p-6 text-center">
+              <div className="text-6xl mb-4">{game.icon}</div>
+              <h3 className="text-xl font-bold mb-2">{game.name}</h3>
+              <p className="text-sm opacity-80 mb-4">{game.description}</p>
+              <div className="flex justify-between items-center mb-4">
+                <Badge variant="secondary" className="text-xs">
+                  🎮 {game.controls}
+                </Badge>
+                <Badge variant="secondary" className="text-xs">
+                  💰 +Monedas
+                </Badge>
               </div>
+              <Button 
+                onClick={() => startGame(game.id)}
+                className="w-full bg-white/20 hover:bg-white/30 text-white border border-white/30"
+              >
+                🎮 JUGAR
+              </Button>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      {/* 🎮 INFORMACIÓN DE CONTROLES */}
-      <Card className="bg-gradient-to-br from-emerald-900 to-teal-900 text-white border-0 shadow-xl">
+      {/* 📊 INFORMACIÓN */}
+      <Card className="bg-black/20">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Trophy className="w-6 h-6" />
-            Controles y Características
-          </CardTitle>
+          <CardTitle>📊 Sistema de Recompensas</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <h4 className="font-bold mb-3 text-cyan-300">🎮 Controles Universales:</h4>
-              <ul className="space-y-2 text-sm">
-                <li>• <strong>Teclado:</strong> WASD o Flechas</li>
-                <li>• <strong>Ratón:</strong> Click y movimiento</li>
-                <li>• <strong>Táctil:</strong> Optimizado para móviles</li>
-                <li>• <strong>Responsive:</strong> Se adapta a tu pantalla</li>
+              <h4 className="font-bold mb-2">💰 Monedas por Juego:</h4>
+              <ul className="space-y-1 text-sm">
+                <li>• <strong>PONG:</strong> score / 10 monedas</li>
+                <li>• <strong>TETRIS:</strong> score / 100 monedas</li>
+                <li>• <strong>MEMORY:</strong> score / 50 monedas</li>
+                <li>• <strong>SIMON:</strong> score / 50 monedas</li>
+                <li>• <strong>BREAKOUT:</strong> score / 100 monedas</li>
+                <li>• <strong>2048:</strong> score / 100 monedas</li>
               </ul>
             </div>
-            
             <div>
-              <h4 className="font-bold mb-3 text-emerald-300">🏆 Sistema de Puntuación:</h4>
-              <ul className="space-y-2 text-sm">
-                <li>• <strong>Records:</strong> Se guardan automáticamente</li>
-                <li>• <strong>Leaderboard:</strong> Compite con otros</li>
-                <li>• <strong>Progreso:</strong> Desbloquea logros</li>
-                <li>• <strong>Recompensas:</strong> Gana monedas jugando</li>
+              <h4 className="font-bold mb-2">⭐ Experiencia:</h4>
+              <ul className="space-y-1 text-sm">
+                <li>• Cada juego suma experiencia</li>
+                <li>• Al llegar a 1000 XP subes de nivel</li>
+                <li>• Los niveles dan bonificaciones</li>
+                <li>• ¡Juega más para progresar!</li>
               </ul>
-            </div>
-
-            <div>
-              <h4 className="font-bold mb-3 text-purple-300">✨ Características Pro:</h4>
-              <ul className="space-y-2 text-sm">
-                <li>• <strong>Sin lag:</strong> Optimizado para producción</li>
-                <li>• <strong>Fluido:</strong> 60 FPS garantizados</li>
-                <li>• <strong>Pausable:</strong> Pausa en cualquier momento</li>
-                <li>• <strong>Progreso:</strong> Se guarda automáticamente</li>
-              </ul>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* 🎮 ESTADÍSTICAS DE JUEGOS */}
-      <Card className="bg-gradient-to-br from-gray-900 to-black text-white border-0 shadow-xl">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Star className="w-6 h-6 text-yellow-400" />
-            Logros y Estadísticas
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center p-4 bg-white/10 rounded-lg">
-              <div className="text-2xl font-bold text-cyan-400">6</div>
-              <div className="text-sm text-gray-300">Juegos Disponibles</div>
-            </div>
-            
-            <div className="text-center p-4 bg-white/10 rounded-lg">
-              <div className="text-2xl font-bold text-green-400">100%</div>
-              <div className="text-sm text-gray-300">Sin Bugs</div>
-            </div>
-            
-            <div className="text-center p-4 bg-white/10 rounded-lg">
-              <div className="text-2xl font-bold text-purple-400">60</div>
-              <div className="text-sm text-gray-300">FPS Garantizados</div>
-            </div>
-            
-            <div className="text-center p-4 bg-white/10 rounded-lg">
-              <div className="text-2xl font-bold text-yellow-400">∞</div>
-              <div className="text-sm text-gray-300">Diversión Infinita</div>
             </div>
           </div>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
